@@ -26,11 +26,9 @@
           <li><a href="#inicio" data-nav>Inicio</a></li>
           <li><a href="#servicios" data-nav>Servicios</a></li>
           <li><a href="#ingenieria" data-nav>Ingeniería</a></li>
-          <li><a href="#metodologia" data-nav>Metodología</a></li>
-          <li><a href="#beneficios" data-nav>Beneficios</a></li>
-          <li><a href="#cotizacion" data-nav>Cotización</a></li>
+          <li><a href="simulador.html" class="nav__sim" data-sim-link>Simulador solar</a></li>
+          <li><a href="#laboratorio" data-nav>Laboratorio</a></li>
           <li><a href="#contacto" data-nav>Contacto</a></li>
-          <li><a href="simulador.html" class="nav__sim" data-sim-link>Simulador C.S.</a></li>
         </ul>
         <span class="nav__dot" aria-hidden="true"></span>
       </nav>
@@ -598,6 +596,55 @@
       </div>
     </section>
 
+    <!-- ============ 05c · LABORATORIO SOLAR INTERACTIVO ============ -->
+    <section class="section labsec" id="laboratorio" aria-labelledby="labsec-title">
+      <div class="wrap">
+        <header class="section__head section__head--split" data-reveal>
+          <div>
+            <p class="eyebrow">Nuevo · Versión 3</p>
+            <h2 id="labsec-title" class="h2">Laboratorio Solar Interactivo</h2>
+          </div>
+          <p class="lead">Tres simulaciones para entender de dónde sale la energía de un panel: el espectro real del Sol, el efecto fotoeléctrico y la unión p-n de una celda fotovoltaica. Cálculos físicos documentados, ejecutados en tu navegador.</p>
+        </header>
+        <ol class="hub">
+          <li class="hubcard" data-reveal>
+            <div class="hubcard__art" aria-hidden="true">
+              <svg viewBox="0 0 320 150" preserveAspectRatio="none"><defs><linearGradient id="hubVis" x1="0" x2="1"><stop offset="0" stop-color="#7B2FBE"/><stop offset=".2" stop-color="#2E5BFF"/><stop offset=".4" stop-color="#18C3B5"/><stop offset=".55" stop-color="#5BD54A"/><stop offset=".7" stop-color="#F5D623"/><stop offset=".85" stop-color="#F58B23"/><stop offset="1" stop-color="#E5312F"/></linearGradient></defs><path class="hub-curve-fill" d="M0 150 L0 130 C30 40 60 18 90 22 C130 28 160 50 200 78 C240 104 280 122 320 132 L320 150 Z"/><path class="hub-curve" d="M0 130 C30 40 60 18 90 22 C130 28 160 50 200 78 C240 104 280 122 320 132"/></svg>
+            </div>
+            <span class="qcard__tag">Simulador</span>
+            <h3>Espectro de la luz solar</h3>
+            <p>Irradiancia espectral ASTM G173 fuera y dentro de la atmósfera, regiones UV, visible e infrarroja, y la energía de cada fotón con E = hc/λ.</p>
+            <a class="btn btn--primary" href="laboratorio.html#espectro" data-sim-link>Explorar el espectro</a>
+          </li>
+          <li class="hubcard hubcard--dark" data-reveal style="--d:100ms">
+            <div class="hubcard__art" aria-hidden="true">
+              <span class="pe-plate"></span><span class="pe-ph pe-ph--1"></span><span class="pe-ph pe-ph--2"></span><span class="pe-ph pe-ph--3"></span><span class="pe-el pe-el--1"></span><span class="pe-el pe-el--2"></span><span class="pe-anode"></span>
+            </div>
+            <span class="qcard__tag">Simulador</span>
+            <h3>Efecto fotoeléctrico</h3>
+            <p>Cámara de vacío con fotones, electrones, voltímetro y amperímetro. Comprueba K<sub>max</sub> = hf − Φ con cinco metales de referencia.</p>
+            <a class="btn btn--primary" href="laboratorio.html#fotoelectrico" data-sim-link>Iniciar experimento</a>
+          </li>
+          <li class="hubcard" data-reveal style="--d:200ms">
+            <div class="hubcard__art" aria-hidden="true">
+              <span class="pn-n"></span><span class="pn-d"></span><span class="pn-p"></span><span class="pn-e"></span><span class="pn-h"></span>
+            </div>
+            <span class="qcard__tag">Simulador</span>
+            <h3>Celda fotovoltaica</h3>
+            <p>Pares electrón-hueco, región de agotamiento y circuito externo en una unión p-n de silicio, arseniuro de galio o germanio.</p>
+            <a class="btn btn--primary" href="laboratorio.html#celda" data-sim-link>Ver la celda por dentro</a>
+          </li>
+        </ol>
+        <div class="labsec__cta" data-reveal>
+          <p>¿Prefieres dimensionar un sistema real? El Simulador solar calcula paneles, inversor, baterías y retorno.</p>
+          <div class="closing__actions">
+            <a class="btn btn--sun" href="laboratorio.html" data-sim-link>Abrir el laboratorio</a>
+            <a class="btn btn--line" href="simulador.html" data-sim-link>Simulador solar</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ 06 · SOSTENIBILIDAD ============ -->
     <section class="section sust" id="sostenibilidad" aria-labelledby="sust-title">
       <div class="wrap">
@@ -682,19 +729,21 @@
           <li><a href="#beneficios">Beneficios</a></li>
           <li><a href="#sostenibilidad">Sostenibilidad</a></li>
           <li><a href="#cotizacion">Cotización</a></li>
-          <li><a href="simulador.html" data-sim-link>Simulador de Celdas Solares</a></li>
+          <li><a href="simulador.html" data-sim-link>Simulador solar</a></li>
+          <li><a href="laboratorio.html" data-sim-link>Laboratorio interactivo</a></li>
         </ul>
       </nav>
     </div>
     <div class="wrap footer__author">
-      <div class="author" aria-label="Autoría del proyecto">
-        <span class="author__tag">Proyecto académico</span>
+      <div class="author" aria-label="Créditos del proyecto">
+        <span class="author__tag">Créditos</span>
         <dl class="author__list">
-          <div><dt>Autor</dt><dd>Rodrigo Espada</dd></div>
+          <div><dt>Desarrollado por</dt><dd>Rodrigo Espada</dd></div>
           <div><dt>Institución</dt><dd>Tecnológico de Monterrey</dd></div>
           <div><dt>Carrera</dt><dd>Ingeniería Industrial</dd></div>
-          <div><dt>Matrícula</dt><dd>A01742679</dd></div>
+          <div><dt>Matrícula</dt><dd class="author__pending">Pendiente de proporcionar</dd></div>
         </dl>
+        <p class="author__note">Proyecto académico del estudiante. No es una publicación oficial ni cuenta con el respaldo del Tecnológico de Monterrey.</p>
       </div>
     </div>
     <div class="wrap footer__legal">

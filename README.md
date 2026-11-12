@@ -4,7 +4,8 @@ Landing page corporativa y **Simulador de Celdas Solares** (HTML + CSS + JavaScr
 Estilo visual: formas planas y redondeadas (flat vector), color en bloques, profundidad 3D discreta y paleta de marca SVOLTS
 (#0B1F3A, #2473B8, #F5A623, #FFFFFF, #F4F7FA, #172536).
 
-**Autor:** Rodrigo Espada · Ingeniería Industrial · Tecnológico de Monterrey · Matrícula A01742679
+**Desarrollado por:** Rodrigo Espada · Ingeniería Industrial · Tecnológico de Monterrey · Matrícula: pendiente de proporcionar.
+Proyecto académico del estudiante; no es una publicación oficial ni cuenta con el respaldo de la institución.
 
 ## Novedades de la versión 2
 
