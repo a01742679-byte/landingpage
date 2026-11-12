@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Laboratorio Solar Interactivo · SVOLTS</title>
+  <meta name="description" content="Laboratorio Solar Interactivo de SVOLTS: espectro de la radiación solar con datos ASTM G173, efecto fotoeléctrico y funcionamiento de una celda fotovoltaica p-n. Todo se calcula en tu navegador.">
+  <meta name="theme-color" content="#0B1F3A">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/space-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="simulador.css">
+  <link rel="stylesheet" href="laboratorio.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="lab-page">
+  <a class="skip" href="#lab">Saltar al laboratorio</a>
+
+  <header class="nav" id="nav">
+    <div class="nav__bar">
+      <a class="brand" href="index.html#inicio" aria-label="SVOLTS Ingeniería Solar, ir al inicio">
+        <img src="assets/logo-horizontal.png" alt="SVOLTS Ingeniería Solar" width="176" height="50">
+      </a>
+      <nav class="nav__menu" id="menu" aria-label="Principal">
+        <ul class="nav__list">
+          <li><a href="index.html#inicio">Inicio</a></li>
+          <li><a href="index.html#servicios">Servicios</a></li>
+          <li><a href="index.html#ingenieria">Ingeniería</a></li>
+          <li><a href="simulador.html" class="nav__sim">Simulador solar</a></li>
+          <li><a href="laboratorio.html" class="is-active" aria-current="page">Laboratorio</a></li>
+          <li><a href="index.html#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="lab">
+    <!-- ================= PORTADA DEL LABORATORIO ================= -->
+    <section class="labhero" aria-labelledby="lab-title">
+      <canvas class="labhero__field" id="heroField" aria-hidden="true"></canvas>
+      <div class="wrap labhero__inner">
+        <p class="chip chip--sun"><span class="chip__dot"></span>Versión 3 · física calculada en tu navegador</p>
+        <h1 id="lab-title" class="labhero__title">Laboratorio Solar Interactivo</h1>
+        <p class="labhero__lead">Del fotón a la corriente eléctrica: explora el espectro real del Sol, el efecto fotoeléctrico y cómo una unión p-n convierte la luz en electricidad.</p>
+        <nav class="labtabs" aria-label="Simulaciones del laboratorio">
+          <a class="labtab" href="#espectro" data-lab="espectro">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 18c3-9 5-12 7-12s3 6 5 6 3-4 4-4 2 2 4 2"/></svg>
+            <span><strong>Espectro solar</strong><small>λ, f y energía del fotón</small></span>
+          </a>
+          <a class="labtab" href="#fotoelectrico" data-lab="fotoelectrico">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6l5 4M3 11l5 2M3 16l5 0"/><rect x="9" y="4" width="3" height="16" rx="1"/><circle cx="17" cy="9" r="1.6"/><circle cx="20" cy="14" r="1.6"/></svg>
+            <span><strong>Efecto fotoeléctrico</strong><small>K<sub>max</sub> = hf − Φ</small></span>
+          </a>
+          <a class="labtab" href="#celda" data-lab="celda">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="5" rx="1"/><rect x="3" y="10" width="18" height="9" rx="1"/><path d="M8 7.5h1M15 14h1M12 2v2"/></svg>
+            <span><strong>Celda fotovoltaica</strong><small>Unión p-n</small></span>
+          </a>
+        </nav>
+      </div>
+    </section>
+
+    <div class="labbody">
+      <!-- ================= ÍNDICE DEL LABORATORIO ================= -->
+      <section class="labview" data-labview="inicio" aria-labelledby="hub-title">
+        <div class="wrap">
+          <header class="labhead">
+            <div>
+              <p class="eyebrow-s">Tres experiencias</p>
+              <h2 id="hub-title" class="h3">Elige una simulación</h2>
+            </div>
+            <a class="btn btn--ghost btn--sm" href="index.html">Página principal</a>
+          </header>
+          <ol class="hub">
+            <li class="hubcard">
+              <div class="hubcard__art hubcard__art--spec" aria-hidden="true">
+                <svg viewBox="0 0 320 150" preserveAspectRatio="none"><defs><linearGradient id="hubVis" x1="0" x2="1"><stop offset="0" stop-color="#7B2FBE"/><stop offset=".2" stop-color="#2E5BFF"/><stop offset=".4" stop-color="#18C3B5"/><stop offset=".55" stop-color="#5BD54A"/><stop offset=".7" stop-color="#F5D623"/><stop offset=".85" stop-color="#F58B23"/><stop offset="1" stop-color="#E5312F"/></linearGradient></defs><path class="hub-curve-fill" d="M0 150 L0 130 C30 40 60 18 90 22 C130 28 160 50 200 78 C240 104 280 122 320 132 L320 150 Z"/><path class="hub-curve" d="M0 130 C30 40 60 18 90 22 C130 28 160 50 200 78 C240 104 280 122 320 132"/></svg>
+              </div>
+              <span class="qcard__tag">Espectro</span>
+              <h3>Espectro de la luz solar</h3>
+              <p>Irradiancia espectral de referencia ASTM G173 fuera de la atmósfera y en la superficie, regiones UV, visible e infrarroja, y energía de cada fotón en joules y electronvoltios.</p>
+              <a class="btn btn--primary" href="#espectro" data-lab="espectro">Abrir simulación</a>
+            </li>
+            <li class="hubcard hubcard--dark">
+              <div class="hubcard__art hubcard__art--pe" aria-hidden="true">
+                <span class="pe-plate"></span><span class="pe-ph pe-ph--1"></span><span class="pe-ph pe-ph--2"></span><span class="pe-ph pe-ph--3"></span><span class="pe-el pe-el--1"></span><span class="pe-el pe-el--2"></span><span class="pe-anode"></span>
+              </div>
+              <span class="qcard__tag">Fotoeléctrico</span>
+              <h3>Efecto fotoeléctrico</h3>
+              <p>Cámara de vacío con fuente de luz, cátodo, ánodo, voltímetro y amperímetro. Cambia la longitud de onda, la intensidad, el metal y el voltaje.</p>
+              <a class="btn btn--sun" href="#fotoelectrico" data-lab="fotoelectrico">Abrir simulación</a>
+            </li>
+            <li class="hubcard">
+              <div class="hubcard__art hubcard__art--pn" aria-hidden="true">
+                <span class="pn-n"></span><span class="pn-d"></span><span class="pn-p"></span><span class="pn-e"></span><span class="pn-h"></span>
+              </div>
+              <span class="qcard__tag">Fotovoltaico</span>
+              <h3>Celda fotovoltaica p-n</h3>
+              <p>Generación de pares electrón-hueco, separación de cargas en la región de agotamiento y corriente por el circuito externo. Compara con el efecto fotoeléctrico.</p>
+              <a class="btn btn--primary" href="#celda" data-lab="celda">Abrir simulación</a>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ================= 1. ESPECTRO SOLAR ================= -->
+      <section class="labview" data-labview="espectro" aria-labelledby="spec-title" hidden>
+        <div class="wrap">
+          <header class="labhead">
+            <div>
+              <p class="eyebrow-s">Simulación 1 · Radiación solar</p>
+              <h2 id="spec-title" class="h3">Espectro de la luz solar</h2>
+              <p class="lead">Irradiancia espectral del Sol según los espectros de referencia ASTM G173-03. Pasa el cursor sobre la gráfica para leer cada longitud de onda y haz clic para seleccionarla.</p>
+            </div>
+            <div class="labhead__actions">
+              <a class="btn btn--ghost btn--sm" href="#inicio" data-lab="inicio">← Laboratorio</a>
+              <a class="btn btn--line btn--sm" href="index.html">Página principal</a>
+            </div>
+          </header>
+
+          <div class="spec">
+            <figure class="spec__fig">
+              <div class="spec__chart" id="specChart" tabindex="0" role="group" aria-label="Gráfica del espectro solar. Usa las flechas izquierda y derecha para cambiar la longitud de onda seleccionada."></div>
+              <div class="spec__tip" id="specTip" hidden></div>
+              <figcaption class="spec__legend" id="specLegend"></figcaption>
+            </figure>
+
+            <aside class="spec__panel" aria-label="Controles del espectro">
+              <div class="ctl">
+                <span class="ctl__label" id="sv-l">Espectro</span>
+                <div class="seg" role="radiogroup" aria-labelledby="sv-l" id="specView">
+                  <button type="button" role="radio" data-v="terrestre">Terrestre</button>
+                  <button type="button" role="radio" data-v="extraterrestre">Extraterrestre</button>
+                  <button type="button" role="radio" data-v="comparar">Comparar</button>
+                </div>
+              </div>
+              <label class="check check--sm" for="specBB"><input id="specBB" type="checkbox"><span><strong>Superponer cuerpo negro a 5772 K</strong><small>Modelo teórico de Planck, no medición.</small></span></label>
+              <div class="ctl">
+                <span class="ctl__label" id="sr-l">Región espectral</span>
+                <div class="seg seg--4" role="radiogroup" aria-labelledby="sr-l" id="specRegion">
+                  <button type="button" role="radio" data-r="todo">Todo</button>
+                  <button type="button" role="radio" data-r="uv">UV</button>
+                  <button type="button" role="radio" data-r="vis">Visible</button>
+                  <button type="button" role="radio" data-r="ir">IR</button>
+                </div>
+              </div>
+              <label class="ctl" for="specG"><span class="ctl__label">Irradiancia en superficie <output id="specGOut" for="specG"></output></span>
+                <input id="specG" type="range" min="0" max="1200" step="10">
+                <span class="ctl__hint">Escala las curvas terrestres a partir de 1000 W/m², con la misma forma espectral (supuesto).</span></label>
+              <label class="ctl" for="specL"><span class="ctl__label">Longitud de onda <output id="specLOut" for="specL"></output></span>
+                <input id="specL" type="range" min="280" max="2500" step="1"></label>
+              <div class="ctl ctl--row">
+                <label for="specLNum"><span class="ctl__label">λ (nm)</span><input id="specLNum" type="number" min="280" max="4000" step="1" inputmode="decimal"></label>
+                <label for="specFNum"><span class="ctl__label">f (THz)</span><input id="specFNum" type="number" min="74" max="1071" step="0.1" inputmode="decimal"></label>
+              </div>
+              <p class="ctl__err" id="specErr" role="alert" hidden></p>
+            </aside>
+          </div>
+
+          <div class="photon" id="specPhoton" aria-live="polite"></div>
+
+          <div class="spec__lower">
+            <figure class="wavebox">
+              <div class="wavebox__head">
+                <h3 class="h5">Onda electromagnética</h3>
+                <button class="btn btn--sm btn--line playbtn" type="button" id="waveToggle" aria-pressed="false">Pausar</button>
+              </div>
+              <canvas id="waveCanvas" height="170" aria-label="Animación de una onda electromagnética con la longitud de onda seleccionada" role="img"></canvas>
+              <figcaption class="note" id="waveCap"></figcaption>
+            </figure>
+            <div class="regtable">
+              <h3 class="h5">Energía por región <span class="regtable__src" id="regSrc"></span></h3>
+              <div class="tablewrap"><table class="lab-table" id="regTable"></table></div>
+              <p class="note">Integrales de la tabla ASTM G173 entre 280 y 4000 nm por la regla del trapecio. Límites UV/visible/IR convencionales: 380 y 750 nm.</p>
+            </div>
+          </div>
+
+          <details class="learn">
+            <summary>Cómo se calcula</summary>
+            <p><strong>Frecuencia:</strong> f = c / λ, con c = 299 792 458 m/s. <strong>Energía del fotón:</strong> E = h·f = h·c / λ, con h = 6.626 070 15 × 10⁻³⁴ J·s. Para pasar de joules a electronvoltios se divide entre e = 1.602 176 634 × 10⁻¹⁹ C. En unidades prácticas: E [eV] ≈ 1239.84 / λ [nm].</p>
+            <p><strong>Datos:</strong> las curvas extraterrestre (AM0), global (AM1.5, superficie inclinada 37°) y directa (AM1.5, directa normal + circunsolar) son los valores tabulados de la norma ASTM G173-03, calculados por NREL con el modelo SMARTS v2.9.2 para una atmósfera estándar de referencia. No son una medición puntual de un día concreto. La curva de cuerpo negro es un modelo teórico: E(λ) = π·B(λ, 5772 K)·(R<sub>☉</sub>/UA)², y su integral da ≈ 1361 W/m².</p>
+            <p><strong>Control de irradiancia:</strong> multiplica las curvas terrestres por G/1000 manteniendo su forma. En la realidad la forma cambia con la masa de aire, el vapor de agua y los aerosoles.</p>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 2. EFECTO FOTOELÉCTRICO ================= -->
+      <section class="labview" data-labview="fotoelectrico" aria-labelledby="pe-title" hidden>
+        <div class="wrap">
+          <header class="labhead">
+            <div>
+              <p class="eyebrow-s">Simulación 2 · Física cuántica</p>
+              <h2 id="pe-title" class="h3">Efecto fotoeléctrico</h2>
+              <p class="lead">Ilumina un metal dentro de una cámara de vacío. Si cada fotón tiene energía suficiente, arranca electrones que viajan al ánodo y el amperímetro registra corriente.</p>
+            </div>
+            <div class="labhead__actions">
+              <a class="btn btn--ghost btn--sm" href="#inicio" data-lab="inicio">← Laboratorio</a>
+              <a class="btn btn--line btn--sm" href="index.html">Página principal</a>
+            </div>
+          </header>
+
+          <div class="pe">
+            <figure class="pe__stage">
+              <canvas id="peCanvas" role="img" aria-label="Cámara de vacío con fuente de luz, cátodo, ánodo, voltímetro y amperímetro"></canvas>
+              <div class="pe__status" id="peStatus" aria-live="polite"></div>
+              <div class="pe__bar">
+                <button class="btn btn--sm btn--sun playbtn" type="button" id="pePlay" aria-pressed="false">Pausar</button>
+                <button class="btn btn--sm btn--line" type="button" id="peReset">Reiniciar experimento</button>
+                <span class="pe__hint">La animación exagera el rendimiento cuántico para que se vean los electrones.</span>
+              </div>
+            </figure>
+
+            <aside class="pe__panel" aria-label="Controles del experimento">
+              <label class="ctl" for="peL"><span class="ctl__label">Longitud de onda <output id="peLOut" for="peL"></output></span>
+                <input id="peL" type="range" min="100" max="850" step="1" class="range-spectrum"></label>
+              <div class="ctl ctl--row">
+                <label for="peLNum"><span class="ctl__label">λ (nm)</span><input id="peLNum" type="number" min="100" max="850" step="1" inputmode="decimal"></label>
+                <label for="peFNum"><span class="ctl__label">f (THz)</span><input id="peFNum" type="number" min="352.7" max="2997.9" step="0.1" inputmode="decimal"></label>
+              </div>
+              <label class="ctl" for="peI"><span class="ctl__label">Intensidad luminosa <output id="peIOut" for="peI"></output></span>
+                <input id="peI" type="range" min="0" max="100" step="1"></label>
+              <div class="ctl">
+                <span class="ctl__label" id="pm-l">Material del cátodo</span>
+                <div class="mats" role="radiogroup" aria-labelledby="pm-l" id="peMats"></div>
+              </div>
+              <label class="ctl" for="peV"><span class="ctl__label">Voltaje aplicado (ánodo − cátodo) <output id="peVOut" for="peV"></output></span>
+                <input id="peV" type="range" min="-6" max="6" step="0.01">
+                <span class="ctl__hint">Negativo: frena a los electrones. Positivo: los acelera hacia el ánodo.</span></label>
+              <div class="ctl ctl--btns">
+                <button class="btn btn--sm btn--line" type="button" id="peStop">Aplicar −V₀</button>
+                <button class="btn btn--sm btn--line" type="button" id="peZero">0 V</button>
+              </div>
+              <p class="ctl__err" id="peErr" role="alert" hidden></p>
+            </aside>
+          </div>
+
+          <div class="readouts" id="peReadouts" aria-live="polite"></div>
+
+          <div class="pe__charts">
+            <figure class="minichart">
+              <h3 class="h5">Corriente contra voltaje</h3>
+              <div id="peIV"></div>
+              <figcaption class="note">Para una frecuencia fija, la corriente se anula en −V₀ y se satura con voltaje positivo. Más intensidad sube la meseta, pero no mueve el punto de corte.</figcaption>
+            </figure>
+            <figure class="minichart">
+              <h3 class="h5">Energía cinética máxima contra frecuencia</h3>
+              <div id="peKF"></div>
+              <figcaption class="note">Recta de pendiente h (la constante de Planck) que corta el eje en la frecuencia umbral f₀ = Φ/h. Cada metal tiene su propia recta, todas paralelas.</figcaption>
+            </figure>
+          </div>
+
+          <div class="matnote" id="peMatNote"></div>
+
+          <div class="compare-cta">
+            <p>¿Qué cambia en un panel solar? En una celda no se arrancan electrones del material: se separan dentro de él.</p>
+            <a class="btn btn--primary" href="#celda" data-lab="celda" id="peToCell">Ver la celda fotovoltaica con esta luz</a>
+          </div>
+
+          <details class="learn">
+            <summary>Modelo físico y supuestos</summary>
+            <p><strong>Ecuación de Einstein:</strong> K<sub>max</sub> = h·f − Φ. Solo hay emisión si h·f ≥ Φ, sin importar la intensidad. <strong>Potencial de frenado:</strong> V₀ = K<sub>max</sub>/e; con un voltaje de −V₀ ningún electrón llega al ánodo.</p>
+            <p><strong>Corriente (modelo simplificado):</strong> I = e · Ṅ<sub>e</sub> · η<sub>col</sub>. Ṅ<sub>fot</sub> = P/(h·f) son los fotones por segundo que llegan al cátodo, con P = 0 a 20 µW según la intensidad. Ṅ<sub>e</sub> = Y · Ṅ<sub>fot</sub> son los electrones emitidos, con un rendimiento cuántico supuesto Y = 1 × 10⁻³ (en metales reales va de 10⁻⁵ a 10⁻³ y cambia con la frecuencia). η<sub>col</sub> es la fracción que llega al ánodo: 1 con voltaje positivo (placas ideales) y 1 − e|V|/K<sub>max</sub> con voltaje negativo, suponiendo energías repartidas uniformemente entre 0 y K<sub>max</sub>.</p>
+            <p>Se ignoran la carga espacial, la corriente oscura, la reflexión del metal y la geometría real del tubo. Las tendencias son correctas, pero las corrientes no predicen un experimento real.</p>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 3. CELDA FOTOVOLTAICA ================= -->
+      <section class="labview" data-labview="celda" aria-labelledby="pn-title" hidden>
+        <div class="wrap">
+          <header class="labhead">
+            <div>
+              <p class="eyebrow-s">Simulación 3 · Semiconductores</p>
+              <h2 id="pn-title" class="h3">Celda fotovoltaica: unión p-n</h2>
+              <p class="lead">Un fotón con energía mayor que la banda prohibida crea un par electrón-hueco. El campo de la región de agotamiento los separa y la carga circula por el circuito externo.</p>
+            </div>
+            <div class="labhead__actions">
+              <a class="btn btn--ghost btn--sm" href="#inicio" data-lab="inicio">← Laboratorio</a>
+              <a class="btn btn--line btn--sm" href="index.html">Página principal</a>
+            </div>
+          </header>
+
+          <div class="seg seg--big" role="radiogroup" aria-label="Fenómeno a observar" id="pnMode">
+            <button type="button" role="radio" data-m="celda">Celda fotovoltaica</button>
+            <button type="button" role="radio" data-m="comparar">Comparar con el efecto fotoeléctrico</button>
+          </div>
+
+          <div class="pe" id="pnMain">
+            <figure class="pe__stage">
+              <canvas id="pnCanvas" role="img" aria-label="Corte de una celda solar con capa n, región de agotamiento, capa p, contactos y circuito externo"></canvas>
+              <div class="pe__status" id="pnStatus" aria-live="polite"></div>
+              <div class="pe__bar">
+                <button class="btn btn--sm btn--sun playbtn" type="button" id="pnPlay" aria-pressed="false">Pausar</button>
+                <button class="btn btn--sm btn--line" type="button" id="pnReset">Reiniciar</button>
+                <label class="check check--inline" for="pnField"><input id="pnField" type="checkbox" checked><span>Campo eléctrico</span></label>
+              </div>
+            </figure>
+            <aside class="pe__panel" aria-label="Controles de la celda">
+              <label class="ctl" for="pnL"><span class="ctl__label">Longitud de onda <output id="pnLOut" for="pnL"></output></span>
+                <input id="pnL" type="range" min="280" max="2000" step="1" class="range-spectrum"></label>
+              <label class="ctl" for="pnLNum"><span class="ctl__label">λ (nm)</span><input id="pnLNum" type="number" min="280" max="2000" step="1" inputmode="decimal"></label>
+              <label class="ctl" for="pnI"><span class="ctl__label">Intensidad luminosa <output id="pnIOut" for="pnI"></output></span>
+                <input id="pnI" type="range" min="0" max="100" step="1"></label>
+              <div class="ctl">
+                <span class="ctl__label" id="ps-l">Semiconductor</span>
+                <div class="mats" role="radiogroup" aria-labelledby="ps-l" id="pnMats"></div>
+              </div>
+              <p class="ctl__err" id="pnErr" role="alert" hidden></p>
+              <a class="btn btn--sm btn--line" href="#fotoelectrico" data-lab="fotoelectrico" id="pnToPe">Ver el experimento fotoeléctrico con esta luz</a>
+            </aside>
+          </div>
+
+          <div class="readouts" id="pnReadouts" aria-live="polite"></div>
+
+          <div class="pnsteps">
+            <ol>
+              <li><span>1</span><div><strong>Absorción</strong><p>El fotón entra por la capa n (delgada). Si E ≥ E<sub>g</sub>, un electrón de la banda de valencia pasa a la de conducción y deja un hueco.</p></div></li>
+              <li><span>2</span><div><strong>Termalización</strong><p>La energía que excede a E<sub>g</sub> se pierde como calor en fracciones de picosegundo. Por eso los fotones azules no rinden más electricidad por fotón que los rojos.</p></div></li>
+              <li><span>3</span><div><strong>Separación</strong><p>En la región de agotamiento, los iones fijos crean un campo eléctrico que empuja a los electrones hacia n y a los huecos hacia p. Los pares generados fuera de ella llegan por difusión.</p></div></li>
+              <li><span>4</span><div><strong>Circuito externo</strong><p>Los electrones salen por el contacto frontal, hacen trabajo en la carga y vuelven por el contacto trasero, donde se recombinan con los huecos.</p></div></li>
+            </ol>
+          </div>
+
+          <div class="compare" id="pnCompare" hidden>
+            <div class="compare__grid">
+              <article class="compare__card">
+                <p class="eyebrow-s">Efecto fotoeléctrico externo</p>
+                <h3 class="h4">El electrón sale del material</h3>
+                <ul>
+                  <li>Ocurre en la superficie de un metal, dentro de una cámara de vacío.</li>
+                  <li>Umbral: la función de trabajo Φ (2 a 5 eV en metales; casi siempre ultravioleta).</li>
+                  <li>El electrón escapa con K<sub>max</sub> = hf − Φ.</li>
+                  <li>Se necesita un voltaje externo para recolectarlo; no genera potencia útil.</li>
+                </ul>
+                <div id="cmpPe" class="compare__fig"></div>
+              </article>
+              <article class="compare__card compare__card--pv">
+                <p class="eyebrow-s">Efecto fotovoltaico</p>
+                <h3 class="h4">La carga se separa dentro del semiconductor</h3>
+                <ul>
+                  <li>Ocurre en el volumen de un semiconductor con una unión p-n.</li>
+                  <li>Umbral: la banda prohibida E<sub>g</sub> (1.12 eV en silicio; incluye visible e infrarrojo cercano).</li>
+                  <li>El exceso E − E<sub>g</sub> se pierde como calor; cada par aprovecha como máximo E<sub>g</sub>.</li>
+                  <li>El campo interno de la unión produce voltaje y entrega potencia a una carga, sin fuente externa.</li>
+                </ul>
+                <div id="cmpPv" class="compare__fig"></div>
+              </article>
+            </div>
+            <div class="tablewrap"><table class="lab-table" id="cmpTable"></table></div>
+          </div>
+
+          <details class="learn">
+            <summary>Modelo y supuestos</summary>
+            <p>Bandas prohibidas a 300 K: Si 1.12 eV, GaAs 1.42 eV, Ge 0.66 eV (Sze y Ng, <em>Physics of Semiconductor Devices</em>). Longitud de onda de corte: λ<sub>c</sub> = h·c / E<sub>g</sub>. Fracción aprovechable por fotón absorbido: E<sub>g</sub> / E; el resto es calor de termalización.</p>
+            <p>La animación es conceptual: la profundidad de absorción es menor para fotones más energéticos (cualitativamente correcto), todos los pares se recolectan y no se modelan reflexión, recombinación, resistencias ni el voltaje de la celda. Para curvas I-V de un panel real usa el modo avanzado del <a href="simulador.html#curva">Simulador solar</a>.</p>
+          </details>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <div class="footer__brand">
+        <img src="assets/logo-horizontal.png" alt="SVOLTS Ingeniería Solar" width="176" height="50">
+        <p>Transformamos la luz solar en energía inteligente.</p>
+      </div>
+      <nav aria-label="Pie de página">
+        <ul class="footer__nav">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="simulador.html">Simulador solar</a></li>
+          <li><a href="laboratorio.html#espectro">Espectro solar</a></li>
+          <li><a href="laboratorio.html#fotoelectrico">Efecto fotoeléctrico</a></li>
+          <li><a href="laboratorio.html#celda">Celda fotovoltaica</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="wrap footer__author">
+      <div class="author" aria-label="Créditos del proyecto">
+        <span class="author__tag">Créditos</span>
+        <dl class="author__list">
+          <div><dt>Desarrollado por</dt><dd>Rodrigo Espada</dd></div>
+          <div><dt>Institución</dt><dd>Tecnológico de Monterrey</dd></div>
+          <div><dt>Carrera</dt><dd>Ingeniería Industrial</dd></div>
+          <div><dt>Matrícula</dt><dd class="author__pending">Pendiente de proporcionar</dd></div>
+        </dl>
+        <p class="author__note">Proyecto académico del estudiante. No es una publicación oficial ni cuenta con el respaldo del Tecnológico de Monterrey.</p>
+      </div>
+    </div>
+    <div class="wrap footer__legal">
+      <p>© 2026 SVOLTS · Ingeniería Solar. Las simulaciones son modelos didácticos documentados; no sustituyen mediciones ni un cálculo de ingeniería. Datos espectrales: ASTM G173-03 (NREL, SMARTS v2.9.2).</p>
+    </div>
+  </footer>
+
+  <script src="data/astm-g173.js"></script>
+  <script src="lab-core.js"></script>
+  <script src="laboratorio.js"></script>
+  <script src="lab-espectro.js"></script>
+  <script src="lab-fotoelectrico.js"></script>
+  <script src="lab-celda.js"></script>
+</body>
+</html>

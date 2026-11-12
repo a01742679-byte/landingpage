@@ -371,6 +371,54 @@
     };
   }
 
+  /* Modo básico por número de paneles:
+       P_inst = N × P_panel                         [kWp]
+       E_día  = P_inst × HSP × PR                   [kWh/día]
+       E_mes  = E_día × 365/12      E_año = E_día × 365
+     El ahorro supone que toda la energía generada se consume o se compensa. */
+  function basicFromPanels(p) {
+    const n = Math.max(0, Math.round(num(p.n)));
+    const panelW = Math.max(0, num(p.panelW));
+    const hsp = Math.max(0, num(p.hsp, 5.5));
+    const pr = clamp(num(p.pr, 0.75), 0, 1);
+    const kwp = (n * panelW) / 1000;
+    const genDay = kwp * hsp * pr;
+    const genYear = genDay * 365;
+    return {
+      n, kwp, genDay, genMonth: genDay * DAYS_MONTH, genYear,
+      savingYear: genYear * Math.max(0, num(p.tariff)),
+      panelCost: n * Math.max(0, num(p.panelPrice)),
+    };
+  }
+
+  /* Coherencia de los datos eléctricos de un módulo (ficha o captura manual).
+     Rangos típicos de módulos de silicio cristalino comerciales; fuera de
+     ellos se marca "Revisar", no necesariamente error. */
+  function validatePanelData(p) {
+    const voc = num(p.voc, NaN), isc = num(p.isc, NaN), vmp = num(p.vmp, NaN), imp = num(p.imp, NaN);
+    const pmax = num(p.pmax, NaN), tc = num(p.tcVoc, NaN);
+    const checks = [];
+    const add = (id, label, status, detail) => checks.push({ id, label, status, detail });
+    const pos = [voc, isc, vmp, imp].every((v) => Number.isFinite(v) && v > 0);
+    add('pos', 'Valores positivos', pos ? 'ok' : 'fail', pos ? 'Voc, Isc, Vmp e Imp son mayores que cero.' : 'Voc, Isc, Vmp e Imp deben ser números mayores que cero.');
+    if (!pos) return { checks, valid: false };
+    add('v', 'Vmp menor que Voc', vmp < voc ? 'ok' : 'fail', f(vmp, 2) + ' V frente a ' + f(voc, 2) + ' V. ' + (vmp < voc ? 'Relación Vmp/Voc = ' + f(vmp / voc, 3) + (vmp / voc < 0.74 || vmp / voc > 0.9 ? ' (fuera del rango típico 0.74–0.90).' : '.') : 'En el punto de máxima potencia el voltaje siempre es menor que en circuito abierto.'));
+    add('i', 'Imp menor que Isc', imp < isc ? 'ok' : 'fail', f(imp, 2) + ' A frente a ' + f(isc, 2) + ' A. ' + (imp < isc ? 'Relación Imp/Isc = ' + f(imp / isc, 3) + (imp / isc < 0.85 || imp / isc > 0.98 ? ' (fuera del rango típico 0.85–0.98).' : '.') : 'La corriente de máxima potencia siempre es menor que la de corto circuito.'));
+    const valid = vmp < voc && imp < isc;
+    const prod = vmp * imp;
+    if (Number.isFinite(pmax) && pmax > 0) {
+      const err = Math.abs(prod - pmax) / pmax;
+      add('p', 'Pmax = Vmp × Imp', err <= 0.02 ? 'ok' : err <= 0.05 ? 'warn' : 'fail', f(vmp, 2) + ' V × ' + f(imp, 2) + ' A = ' + f(prod, 1) + ' W frente a ' + f(pmax, 0) + ' W de la ficha (diferencia ' + f(err * 100, 1) + ' %).');
+    } else {
+      add('p', 'Pmax = Vmp × Imp', 'ok', 'Potencia máxima calculada: ' + f(prod, 1) + ' W.');
+    }
+    const ff = prod / (voc * isc);
+    add('ff', 'Factor de forma', ff >= 0.7 && ff <= 0.86 ? 'ok' : ff >= 0.5 && ff <= 0.9 ? 'warn' : 'fail', 'FF = (Vmp × Imp) / (Voc × Isc) = ' + f(ff, 3) + '. En módulos de silicio comerciales suele estar entre 0.70 y 0.86.');
+    if (Number.isFinite(tc)) add('tc', 'Coeficiente de Voc', tc <= -0.15 && tc >= -0.5 ? 'ok' : 'warn', f(tc, 3) + ' %/°C. Los módulos de silicio suelen estar entre −0.20 y −0.40 %/°C; el voltaje baja al calentarse.');
+    else add('tc', 'Coeficiente de Voc', 'warn', 'Sin dato: se usa −0.28 %/°C.');
+    return { checks, valid, ff };
+  }
+
   /* ------------------------------------------------------------------------
      10. MODO AVANZADO · curva corriente-voltaje (I-V) de un módulo y un arreglo
      Modelo explícito de un diodo a partir de la ficha (Voc, Isc, Vmp, Imp):
@@ -464,5 +512,5 @@
     return { r: R, v, i, p: v * i, ratio: arr.pmp > 0 ? (v * i) / arr.pmp : 0 };
   }
 
-  return { loadsSummary, pvRequirement, panelVoltages, arrayConfig, verifyArray, voltageDrop, batterySizing, verifyBattery, energyYear, costs, cashflow, basicEstimate, cellTemp, ivParams, ivCurrent, ivArray, ivCurve, loadPoint, fmt: f, RHO_CU_70 };
+  return { loadsSummary, pvRequirement, panelVoltages, arrayConfig, verifyArray, voltageDrop, batterySizing, verifyBattery, energyYear, costs, cashflow, basicEstimate, basicFromPanels, validatePanelData, cellTemp, ivParams, ivCurrent, ivArray, ivCurve, loadPoint, fmt: f, RHO_CU_70 };
 });
