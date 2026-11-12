@@ -10,7 +10,6 @@
   const U = window.SVLabUI;
   const G = window.SV_G173;
   const { $, nf, state } = U;
-  const NS = 'http://www.w3.org/2000/svg';
 
   // Curva de cuerpo negro precalculada en la misma malla que G173 (modelo)
   const BB = G.wl.map((l) => L.planckEarth(l, 5772));
