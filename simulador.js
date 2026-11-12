@@ -43,8 +43,8 @@
     view: 'basico',
     lastAdv: 'curva',
     project: { name: 'Aula de ejemplo', client: '', place: 'Culiacán, Sinaloa', company: 'SVOLTS Ingeniería Solar', author: 'Rodrigo Espada' },
-    basic: { kwh: 500, period: 2 },
-    vi: { g: 1000, ta: 25, noct: 45, tcIsc: 0.05, ns: 1, np: 1, r: 3, mppt: false },
+    basic: { kwh: 500, period: 2, by: 'consumo', n: 10, panelW: 0 },
+    vi: { g: 1000, ta: 25, noct: 45, tcIsc: 0.05, ns: 1, np: 1, r: 3, mppt: false, src: 'catalogo', manual: { voc: 52.07, isc: 15.11, vmp: 43.51, imp: 14.25, tcVoc: -0.26 } },
     loads: clone(EXAMPLE_LOADS),
     params: { simultaneity: 0.8, acVolts: 127, daysPerYear: 200 },
     site: { hsp: 5.5, pr: 0.75, tMin: 5, tCellMax: 70 },
@@ -499,41 +499,86 @@
   function renderBasic(M) {
     const B = basicModel(M);
     const e = B.est;
+    const by = state.basic.by === 'paneles' ? 'paneles' : 'consumo';
+    $$('input[name=b-by]').forEach((r) => { r.checked = r.value === by; });
+    $$('[data-basic]').forEach((el) => { el.hidden = el.dataset.basic !== by; });
     $$('input[name=b-period]').forEach((r) => { r.checked = Number(r.value) === B.period; });
     $('#b-periodHint').textContent = B.period === 2 ? 'Se divide entre 2: ' + nf(B.kwhMonth, 0) + ' kWh al mes.' : nf(B.kwhMonth, 0) + ' kWh al mes.';
-    $('#b-pr').textContent = nf(state.site.pr, 2);
-    if (!B.panel || B.kwhMonth <= 0) {
-      $('#basicTiles').innerHTML = '<div class="empty">' + (!B.panel ? 'Agrega un panel al catálogo para estimar.' : 'Escribe tu consumo para ver la estimación.') + '</div>';
-      $('#basicCompare').innerHTML = '';
-      $('#basicPanels').innerHTML = '';
-      $('#basicPanelsNote').textContent = '';
-      return;
+    $('#b-prOut').textContent = nf(state.site.pr, 2);
+    const err = $('#basicErr');
+    const fail = (msg) => {
+      err.textContent = msg || ''; err.hidden = !msg;
+      $('#basicTiles').innerHTML = msg ? '' : $('#basicTiles').innerHTML;
+      $('#basicCompare').innerHTML = ''; $('#basicPanels').innerHTML = ''; $('#basicPanelsNote').textContent = '';
+    };
+    if (!B.panel) { fail('Agrega un panel al catálogo para estimar.'); return; }
+    const hsp = Number(state.site.hsp), pr = Number(state.site.pr), tariff = Number(state.econ.tariff);
+    if (!(hsp >= 1 && hsp <= 9)) { fail('Las horas solar pico deben estar entre 1 y 9.'); return; }
+    if (!(pr >= 0.5 && pr <= 0.95)) { fail('El factor de rendimiento debe estar entre 0.50 y 0.95.'); return; }
+    if (!(tariff >= 0)) { fail('El precio de la energía no puede ser negativo.'); return; }
+
+    let nPanels, panelW, genMonth;
+    if (by === 'paneles') {
+      const n = Number(state.basic.n);
+      const customW = Number(state.basic.panelW) > 0 && Number(state.basic.panelW) !== B.panel.pmax;
+      panelW = customW ? Number(state.basic.panelW) : B.panel.pmax;
+      const pw = $('#b-pw');
+      if (document.activeElement !== pw) pw.value = panelW;
+      if (!(Number.isInteger(n) && n >= 1 && n <= 500)) { fail('La cantidad de paneles debe ser un número entero entre 1 y 500.'); return; }
+      if (!(panelW >= 1 && panelW <= 1000)) { fail('La potencia por panel debe estar entre 1 y 1000 W.'); return; }
+      fail('');
+      const r = C.basicFromPanels({ n, panelW, hsp, pr, tariff, panelPrice: customW ? 0 : B.panel.price });
+      nPanels = n; genMonth = r.genMonth;
+      $('#basicTiles').innerHTML =
+        tile('Potencia instalada', nf(r.kwp, 2) + ' kWp', n + ' × ' + nf(panelW) + ' W' + (customW ? ' (potencia escrita)' : ' · ' + esc(B.panel.brand + ' ' + B.panel.model))) +
+        tile('Generación diaria', nf(r.genDay, 1) + ' kWh', nf(r.kwp, 2) + ' kW × ' + nf(hsp, 1) + ' h × ' + nf(pr, 2), 'blue') +
+        tile('Generación mensual', nf(r.genMonth, 0) + ' kWh', 'Diaria × 30.4 días') +
+        tile('Generación anual', nf(r.genYear, 0) + ' kWh', 'Diaria × 365 días') +
+        tile('Ahorro anual estimado', money(r.savingYear), 'Con ' + money(tariff, 2) + '/kWh, si se aprovecha toda', 'sun') +
+        tile('Costo de los paneles', customW ? '—' : money(r.panelCost), customW ? 'Elige un panel del catálogo para ver el precio' : 'Sin IVA, sin inversor ni instalación');
+    } else {
+      if (B.kwhMonth <= 0) { fail('Escribe tu consumo (mayor que cero) para ver la estimación.'); return; }
+      fail('');
+      nPanels = e.panels; panelW = B.panel.pmax; genMonth = e.genMonth;
+      $('#basicTiles').innerHTML =
+        tile('Paneles necesarios', e.panels + ' × ' + nf(B.panel.pmax) + ' W', esc(B.panel.brand + ' ' + B.panel.model)) +
+        tile('Potencia instalada', nf(e.kwp, 2) + ' kWp', 'Se necesitan ' + nf(e.requiredKW, 2) + ' kW', 'blue') +
+        tile('Generación diaria', nf(e.genDay, 1) + ' kWh', 'Mensual: ' + nf(e.genMonth, 0) + ' kWh') +
+        tile('Generación anual', nf(e.genMonth * 12, 0) + ' kWh', 'Diaria × 365 días') +
+        tile('Ahorro estimado', money(e.savingYear) + '/año', money(e.savingMonth) + ' al mes con ' + money(tariff, 2) + '/kWh', 'sun') +
+        tile('Costo de los paneles', money(e.panelCost), 'Sin IVA, sin inversor ni instalación');
     }
-    $('#basicTiles').innerHTML =
-      tile('Paneles necesarios', e.panels + ' × ' + nf(B.panel.pmax) + ' W', esc(B.panel.brand + ' ' + B.panel.model)) +
-      tile('Potencia del sistema', nf(e.kwp, 2) + ' kWp', 'Se necesitan ' + nf(e.requiredKW, 2) + ' kW', 'blue') +
-      tile('Generación estimada', nf(e.genMonth, 0) + ' kWh/mes', nf(e.genDay, 1) + ' kWh al día') +
-      tile('Ahorro estimado', money(e.savingYear) + '/año', money(e.savingMonth) + ' al mes con ' + money(state.econ.tariff, 2) + '/kWh', 'sun') +
-      tile('Costo de los paneles', money(e.panelCost), 'Sin IVA, sin inversor ni instalación');
-    const max = Math.max(B.kwhMonth, e.genMonth) || 1;
-    $('#basicCompare').innerHTML =
-      '<h3 class="h5">Consumo contra generación, por mes</h3>' +
-      '<div class="bc-row"><span class="bc-n">Consumo</span><span class="bc-t"><i class="bc-c" style="width:' + (B.kwhMonth / max * 100).toFixed(1) + '%"></i></span><span class="bc-v">' + nf(B.kwhMonth, 0) + ' kWh</span></div>' +
-      '<div class="bc-row"><span class="bc-n">Generación solar</span><span class="bc-t"><i class="bc-g" style="width:' + (e.genMonth / max * 100).toFixed(1) + '%"></i></span><span class="bc-v">' + nf(e.genMonth, 0) + ' kWh</span></div>' +
-      '<p class="note">Cubre el ' + nf(e.coverage * 100, 0) + ' % de tu consumo' + (e.genMonth > B.kwhMonth * 1.02 ? '. El excedente (' + nf(e.genMonth - B.kwhMonth, 0) + ' kWh/mes) no se cuenta como ahorro.' : '.') + '</p>';
-    const shown = Math.min(e.panels, 60);
+    if (B.kwhMonth > 0) {
+      const max = Math.max(B.kwhMonth, genMonth) || 1;
+      const cov = Math.min(genMonth, B.kwhMonth) / B.kwhMonth;
+      $('#basicCompare').innerHTML =
+        '<h3 class="h5">Consumo contra generación, por mes</h3>' +
+        '<div class="bc-row"><span class="bc-n">Consumo</span><span class="bc-t"><i class="bc-c" style="width:' + (B.kwhMonth / max * 100).toFixed(1) + '%"></i></span><span class="bc-v">' + nf(B.kwhMonth, 0) + ' kWh</span></div>' +
+        '<div class="bc-row"><span class="bc-n">Generación solar</span><span class="bc-t"><i class="bc-g" style="width:' + (genMonth / max * 100).toFixed(1) + '%"></i></span><span class="bc-v">' + nf(genMonth, 0) + ' kWh</span></div>' +
+        '<p class="note">Cubre el ' + nf(cov * 100, 0) + ' % de un consumo de ' + nf(B.kwhMonth, 0) + ' kWh/mes' + (genMonth > B.kwhMonth * 1.02 ? '. Sobran ' + nf(genMonth - B.kwhMonth, 0) + ' kWh/mes' + (by === 'consumo' ? ', que no se cuentan como ahorro.' : '.') : '.') + '</p>';
+    } else $('#basicCompare').innerHTML = '';
+    const shown = Math.min(nPanels, 60);
     let cells = '';
     for (let k = 0; k < shown; k++) cells += '<span class="bp" style="--i:' + k + '"></span>';
     $('#basicPanels').innerHTML = cells;
-    $('#basicPanelsNote').textContent = e.panels + ' panel(es) de ' + nf(B.panel.pmax) + ' W' + (e.panels > shown ? ' (se muestran ' + shown + ')' : '') + '.';
+    $('#basicPanelsNote').textContent = nPanels + ' panel(es) de ' + nf(panelW) + ' W' + (nPanels > shown ? ' (se muestran ' + shown + ')' : '') + '.';
   }
 
   /* ------------------------------------------------------------------------
      10c. MODO AVANZADO · CURVA I-V
      ------------------------------------------------------------------------ */
+  // Datos eléctricos del módulo: del catálogo o capturados a mano
+  function viPanel() {
+    const v = state.vi;
+    if (v.src === 'manual') {
+      const m = v.manual || {};
+      return { manual: true, brand: 'Módulo', model: 'capturado a mano', voc: Number(m.voc), isc: Number(m.isc), vmp: Number(m.vmp), imp: Number(m.imp), tcVoc: Number(m.tcVoc), pmax: NaN };
+    }
+    return pick('panel', state.sel.panel);
+  }
   function viModel() {
-    const panel = pick('panel', state.sel.panel);
-    if (!panel || !(panel.voc > 0 && panel.isc > 0 && panel.vmp > 0 && panel.imp > 0 && panel.vmp < panel.voc && panel.imp < panel.isc)) return null;
+    const panel = viPanel();
+    if (!panel || !C.validatePanelData(panel).valid) return null;
     const v = state.vi;
     const g = Math.min(1200, Math.max(100, Number(v.g) || 1000));
     const tc = C.cellTemp(v.ta, g, v.noct);
@@ -597,8 +642,15 @@
     $('#vi-gOut').textContent = nf(v.g) + ' W/m²';
     $('#vi-taOut').textContent = nf(v.ta) + ' °C';
     $('#vi-mppt').checked = !!v.mppt;
+    const src = v.src === 'manual' ? 'manual' : 'catalogo';
+    $$('input[name=vi-src]').forEach((r) => { r.checked = r.value === src; });
+    $$('[data-visrc]').forEach((el) => { el.hidden = el.dataset.visrc !== src; });
+    const vp = viPanel();
+    const val = vp ? C.validatePanelData(vp) : { checks: [] };
+    $('#viChecks').innerHTML = vp ? checksHTML(val.checks) : '<li class="empty">Sin panel en el catálogo.</li>';
+    $('#viChecksSrc').textContent = vp ? (vp.manual ? '· datos capturados' : '· ' + vp.brand + ' ' + vp.model) : '';
     if (!d) {
-      $('#viChart').innerHTML = '<p class="empty">El panel seleccionado no tiene Voc, Isc, Vmp e Imp válidos. Revísalo en el Catálogo.</p>';
+      $('#viChart').innerHTML = '<p class="empty">Los datos del módulo no son coherentes (revisa la lista de abajo): no se puede trazar la curva.</p>';
       $('#viTiles').innerHTML = ''; $('#viNote').textContent = ''; $('#viTable').innerHTML = '';
       return;
     }
@@ -970,6 +1022,10 @@
       const f = el.dataset.f;
       state.loads[i][f] = f === 'name' ? el.value : (Number.isNaN(el.valueAsNumber) ? 0 : el.valueAsNumber);
       update();
+    } else if (el.id === 'b-pw') {
+      const v = el.valueAsNumber;
+      state.basic.panelW = Number.isFinite(v) ? v : -1;
+      update();
     } else if (el.id === 'vi-rlog') {
       state.vi.r = Number(Math.pow(10, el.valueAsNumber).toPrecision(3));
       state.vi.mppt = false;
@@ -985,6 +1041,15 @@
     if (el.name === 'mode') { state.mode = el.value; state.nsOverride = null; update(true); }
     else if (el.name === 'sel-panel' || el.name === 'b-panel' || el.name === 'vi-panel') { state.sel.panel = el.value; state.nsOverride = null; update(true); }
     else if (el.name === 'b-period') { state.basic.period = Number(el.value) === 1 ? 1 : 2; update(); }
+    else if (el.name === 'vi-src') {
+      if (el.value === 'manual' && state.vi.src !== 'manual') {
+        const p = pick('panel', state.sel.panel);
+        if (p) state.vi.manual = { voc: p.voc, isc: p.isc, vmp: p.vmp, imp: p.imp, tcVoc: p.tcVoc != null ? p.tcVoc : -0.28 };
+      }
+      state.vi.src = el.value === 'manual' ? 'manual' : 'catalogo';
+      update(true);
+    }
+    else if (el.name === 'b-by') { state.basic.by = el.value === 'paneles' ? 'paneles' : 'consumo'; update(); }
     else if (el.name === 'sel-inv') { state.sel.inverter = el.value; state.nsOverride = null; update(true); }
     else if (el.name === 'sel-bat') { state.sel.battery = el.value; update(true); }
     else if (el.id === 'f-ns') { state.nsOverride = el.value ? Number(el.value) : null; update(true); }

@@ -83,14 +83,26 @@
               <header class="view__head">
                 <p class="eyebrow-s">Modo básico</p>
                 <h2 id="t-basico" class="h3">Estimación rápida de generación solar</h2>
-                <p class="lead">Escribe el consumo de tu recibo de luz y lo que pagas por kWh. El resultado cambia al instante, sin botones de calcular.</p>
+                <p class="lead">Parte de tu recibo de luz o del número de paneles que quieres instalar. El resultado cambia al instante, sin botones de calcular.</p>
               </header>
 
+              <fieldset class="modeseg" id="basicBy">
+                <legend>Calcular a partir de</legend>
+                <label class="modeseg__opt"><input type="radio" name="b-by" value="consumo"><span><strong>Mi consumo</strong><small>Cuántos paneles necesito según mi recibo.</small></span></label>
+                <label class="modeseg__opt"><input type="radio" name="b-by" value="paneles"><span><strong>Número de paneles</strong><small>Cuánta energía generan los paneles que elijo.</small></span></label>
+              </fieldset>
+
               <div class="fields">
-                <label class="field field--key" for="b-kwh"><span class="field__label">Consumo del recibo (kWh)</span>
+                <label class="field field--key" for="b-n" data-basic="paneles"><span class="field__label">Cantidad de paneles</span>
+                  <input id="b-n" type="number" min="1" max="500" step="1" inputmode="numeric" data-bind="basic.n">
+                  <span class="field__hint" id="b-nHint">Entre 1 y 500.</span></label>
+                <label class="field field--key" for="b-pw" data-basic="paneles"><span class="field__label">Potencia nominal por panel (W)</span>
+                  <input id="b-pw" type="number" min="1" max="1000" step="1" inputmode="numeric">
+                  <span class="field__hint">Se llena con el panel del catálogo; puedes escribir otra.</span></label>
+                <label class="field field--key" for="b-kwh" data-basic="consumo"><span class="field__label">Consumo del recibo (kWh)</span>
                   <input id="b-kwh" type="number" min="0" step="1" inputmode="decimal" data-bind="basic.kwh">
                   <span class="field__hint">Aparece en tu recibo de CFE como "consumo" o "kWh".</span></label>
-                <fieldset class="field field--radio">
+                <fieldset class="field field--radio" data-basic="consumo">
                   <legend class="field__label">El recibo es…</legend>
                   <div class="pills">
                     <label class="pillopt"><input type="radio" name="b-period" value="1"><span>Mensual</span></label>
@@ -104,10 +116,14 @@
                 <label class="field" for="b-hsp"><span class="field__label">Horas solar pico del lugar (HSP)</span>
                   <input id="b-hsp" type="number" min="1" max="9" step="0.1" inputmode="decimal" data-bind="site.hsp">
                   <span class="field__hint">Horas equivalentes a 1000 W/m² al día. Consulta un atlas solar de tu ciudad.</span></label>
+                <label class="field" for="b-pr"><span class="field__label">Factor de rendimiento (PR)</span>
+                  <input id="b-pr" type="number" min="0.5" max="0.95" step="0.01" inputmode="decimal" data-bind="site.pr">
+                  <span class="field__hint">Pérdidas por temperatura, suciedad, cableado e inversor. Típico: 0.70 a 0.85.</span></label>
                 <label class="field field--wide" for="b-panel"><span class="field__label">Panel del catálogo</span>
                   <select id="b-panel" name="b-panel"></select></label>
               </div>
 
+              <p class="ctl-err" id="basicErr" role="alert" hidden></p>
               <div class="tiles tiles--big" id="basicTiles" aria-live="polite"></div>
 
               <div class="bcompare" id="basicCompare"></div>
@@ -119,8 +135,8 @@
 
               <details class="learn">
                 <summary>Supuestos de la estimación</summary>
-                <p>Potencia necesaria = consumo mensual ÷ (30.4 días × HSP × PR). Se usa un rendimiento global (PR) de <span id="b-pr"></span>, que agrupa pérdidas por temperatura, suciedad, cableado e inversor.</p>
-                <p>El ahorro supone que la energía solar solo cubre tu propio consumo (no se vende ni se acumula el excedente). El costo considera únicamente los paneles del catálogo, sin IVA, sin inversor, estructura ni instalación: la cotización completa está en el modo avanzado.</p>
+                <p><strong>Por consumo:</strong> potencia necesaria = consumo mensual ÷ (30.4 días × HSP × PR). <strong>Por número de paneles:</strong> potencia instalada = N × potencia nominal; generación diaria = potencia × HSP × PR; mensual = diaria × 30.4; anual = diaria × 365. Se usa un factor de rendimiento (PR) de <span id="b-prOut"></span>, que agrupa pérdidas por temperatura, suciedad, cableado e inversor.</p>
+                <p>Por consumo, el ahorro supone que la energía solar solo cubre tu propio consumo (no se vende ni se acumula el excedente). Por número de paneles, supone que toda la energía generada se consume o se compensa con la red. El costo considera únicamente los paneles del catálogo, sin IVA, sin inversor, estructura ni instalación: la cotización completa está en el modo avanzado.</p>
               </details>
 
               <footer class="view__nav">
@@ -150,10 +166,29 @@
               <div class="tiles" id="viTiles" aria-live="polite"></div>
               <p class="vi-note" id="viNote"></p>
 
+              <div class="vi-checks">
+                <h3 class="h5">Coherencia de los datos eléctricos <span class="vi-checks__src" id="viChecksSrc"></span></h3>
+                <ul class="checks" id="viChecks"></ul>
+              </div>
+
               <div class="vi-controls">
                 <div class="vi-group">
                   <h3 class="h5">Módulo y condiciones</h3>
-                  <label class="field" for="vi-panel"><span class="field__label">Panel del catálogo</span><select id="vi-panel" name="vi-panel"></select></label>
+                  <fieldset class="field field--radio">
+                    <legend class="field__label">Datos del módulo</legend>
+                    <div class="pills">
+                      <label class="pillopt"><input type="radio" name="vi-src" value="catalogo"><span>Catálogo</span></label>
+                      <label class="pillopt"><input type="radio" name="vi-src" value="manual"><span>Captura manual</span></label>
+                    </div>
+                  </fieldset>
+                  <label class="field" for="vi-panel" data-visrc="catalogo"><span class="field__label">Panel del catálogo</span><select id="vi-panel" name="vi-panel"></select></label>
+                  <div class="fields fields--2" data-visrc="manual">
+                    <label class="field" for="vi-voc"><span class="field__label">Voc (V)</span><input id="vi-voc" type="number" min="0.1" max="200" step="0.01" inputmode="decimal" data-bind="vi.manual.voc"></label>
+                    <label class="field" for="vi-isc"><span class="field__label">Isc (A)</span><input id="vi-isc" type="number" min="0.01" max="50" step="0.01" inputmode="decimal" data-bind="vi.manual.isc"></label>
+                    <label class="field" for="vi-vmp"><span class="field__label">Vmp (V)</span><input id="vi-vmp" type="number" min="0.1" max="200" step="0.01" inputmode="decimal" data-bind="vi.manual.vmp"></label>
+                    <label class="field" for="vi-imp"><span class="field__label">Imp (A)</span><input id="vi-imp" type="number" min="0.01" max="50" step="0.01" inputmode="decimal" data-bind="vi.manual.imp"></label>
+                    <label class="field field--wide" for="vi-tcvoc"><span class="field__label">Coef. de Voc (%/°C)</span><input id="vi-tcvoc" type="number" min="-1" max="0" step="0.01" inputmode="decimal" data-bind="vi.manual.tcVoc"></label>
+                  </div>
                   <label class="field" for="vi-g"><span class="field__label">Irradiancia <output id="vi-gOut" for="vi-g"></output></span>
                     <input id="vi-g" type="range" min="100" max="1200" step="10" data-bind="vi.g"></label>
                   <label class="field" for="vi-ta"><span class="field__label">Temperatura ambiente <output id="vi-taOut" for="vi-ta"></output></span>
