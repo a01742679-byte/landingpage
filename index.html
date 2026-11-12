@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>SVOLTS · Ingeniería Solar</title>
+  <meta name="description" content="SVOLTS diseña soluciones fotovoltaicas mediante análisis energético, dimensionamiento técnico y selección estratégica de componentes.">
+  <meta name="theme-color" content="#0B1F3A">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/space-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="skip" href="#contenido">Saltar al contenido</a>
+
+  <!-- ============ NAVEGACIÓN ============ -->
+  <header class="nav" id="nav">
+    <div class="nav__bar">
+      <a class="brand" href="#inicio" aria-label="SVOLTS Ingeniería Solar, ir al inicio">
+        <img src="assets/logo-horizontal.png" alt="SVOLTS Ingeniería Solar" width="176" height="50">
+      </a>
+      <nav class="nav__menu" id="menu" aria-label="Principal">
+        <ul class="nav__list">
+          <li><a href="#inicio" data-nav>Inicio</a></li>
+          <li><a href="#servicios" data-nav>Servicios</a></li>
+          <li><a href="#ingenieria" data-nav>Ingeniería</a></li>
+          <li><a href="#metodologia" data-nav>Metodología</a></li>
+          <li><a href="#beneficios" data-nav>Beneficios</a></li>
+          <li><a href="#cotizacion" data-nav>Cotización</a></li>
+          <li><a href="#contacto" data-nav>Contacto</a></li>
+          <li><a href="simulador.html" class="nav__sim" data-sim-link>Simulador C.S.</a></li>
+        </ul>
+        <span class="nav__dot" aria-hidden="true"></span>
+      </nav>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="contenido">
+
+    <!-- ============ 01 · HERO ============ -->
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="hero__grid-bg" aria-hidden="true"></div>
+      <div class="wrap hero__inner">
+        <div class="hero__copy">
+          <p class="chip chip--sun"><span class="chip__dot"></span>La energía del futuro, diseñada con ingeniería.</p>
+          <h1 id="hero-title" class="hero__title">Transformamos la luz solar en <span class="hero__title-em">energía inteligente.</span></h1>
+          <p class="hero__lead">Diseñamos soluciones fotovoltaicas mediante análisis energético, dimensionamiento técnico y selección estratégica de componentes para aprovechar al máximo el potencial de la energía solar.</p>
+          <div class="hero__actions">
+            <a class="btn btn--sun btn--lg btn--sim" href="simulador.html" data-sim-link><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>Simulador de Celdas Solares</a>
+            <a class="btn btn--ghost" href="#servicios">Explorar soluciones</a>
+          </div>
+        </div>
+
+        <figure class="scene" id="scene" role="img" aria-label="Ilustración en 3D de una isla flotante con un sistema solar fotovoltaico: paneles modulares, inversor, batería y un sol en órbita.">
+          <div class="scene__rig" id="sceneRig">
+            <div class="layer layer--orbit" style="--z:-150px">
+              <svg viewBox="0 0 600 600" focusable="false" aria-hidden="true">
+                <circle class="ring ring--1" cx="300" cy="300" r="120"/>
+                <circle class="ring ring--2" cx="300" cy="300" r="190"/>
+                <circle class="ring ring--3" cx="300" cy="300" r="262"/>
+                <g class="sun-swing">
+                  <polygon class="beam" points="448,150 330,330 520,360"/>
+                  <circle class="sun-halo sun-halo--2" cx="448" cy="130" r="104"/>
+                  <circle class="sun-halo sun-halo--1" cx="448" cy="130" r="78"/>
+                  <circle class="sun-core" cx="448" cy="130" r="52"/>
+                  <path class="sun-bolt" d="M455 104 L437 134 H449 L445 158 L463 128 H451 Z"/>
+                </g>
+                <circle class="orbit-dot" cx="300" cy="38" r="7"/>
+                <circle class="orbit-dot orbit-dot--blue" cx="110" cy="415" r="5"/>
+              </svg>
+            </div>
+
+            <div class="layer layer--clouds" style="--z:-70px">
+              <svg viewBox="0 0 600 600" focusable="false" aria-hidden="true">
+                <g class="cloud cloud--a"><rect x="30" y="170" width="150" height="38" rx="19"/><rect x="62" y="148" width="74" height="40" rx="20"/></g>
+                <g class="cloud cloud--b"><rect x="420" y="330" width="130" height="32" rx="16"/><rect x="452" y="312" width="62" height="34" rx="17"/></g>
+              </svg>
+            </div>
+
+            <div class="layer layer--island" style="--z:0px">
+              <svg id="isoSvg" viewBox="0 0 620 520" focusable="false" aria-hidden="true"></svg>
+            </div>
+
+            <div class="layer layer--float" style="--z:90px">
+              <span class="shape shape--sq" style="--x:8%;--y:34%;--d:0s"></span>
+              <span class="shape shape--tri" style="--x:84%;--y:56%;--d:-2s"></span>
+              <span class="shape shape--ring" style="--x:20%;--y:76%;--d:-4s"></span>
+              <span class="shape shape--dot" style="--x:70%;--y:12%;--d:-1s"></span>
+              <span class="shape shape--plus" style="--x:92%;--y:30%;--d:-3s"></span>
+              <span class="shape shape--sq shape--sm" style="--x:48%;--y:90%;--d:-5s"></span>
+            </div>
+
+            <div class="layer layer--card" style="--z:140px">
+              <div class="plaque">
+                <img src="assets/logo.png" alt="" width="132" height="38">
+                <p>Sistema fotovoltaico · vista 3D</p>
+              </div>
+            </div>
+          </div>
+          <figcaption class="scene__hint" aria-hidden="true">
+            <span class="hint hint--mouse">Mueve el cursor para cambiar la perspectiva</span>
+            <span class="hint hint--touch">Desliza sobre la escena para girarla</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <svg class="hero__hills" viewBox="0 0 1440 120" preserveAspectRatio="none" focusable="false" aria-hidden="true">
+        <path d="M0 120V70C140 20 260 18 400 58s260 54 420 6 300-48 420 8c80 36 160 34 200 6v62z"/>
+      </svg>
+    </section>
+
+    <!-- ============ 02 · SERVICIOS ============ -->
+    <section class="section services" id="servicios" aria-labelledby="services-title">
+      <div class="wrap">
+        <header class="section__head" data-reveal>
+          <h2 id="services-title" class="h2">Seis frentes de ingeniería, un mismo criterio técnico.</h2>
+          <p class="lead">Cada servicio parte de datos del proyecto y de especificaciones verificables. Selecciona una tarjeta para ver el detalle.</p>
+        </header>
+
+        <div class="bento">
+          <article class="tile tile--1" data-reveal style="--d:0ms">
+            <div class="tile__top">
+              <span class="tile__num">01</span>
+              <span class="tile__icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><path d="M8 34a16 16 0 1 1 32 0"/><path d="M24 34l7-10"/><circle cx="24" cy="34" r="2.2"/><path d="M12 34h3M33 34h3M24 18v3M14.5 24.5l2 2M33.5 24.5l-2 2"/><path d="M10 42h28"/></svg>
+              </span>
+            </div>
+            <h3 class="tile__title">Análisis de consumo eléctrico</h3>
+            <p class="tile__text">Registro y evaluación de equipos, potencia instalada y horarios de utilización.</p>
+            <svg class="tile__art" viewBox="0 0 420 190" focusable="false" aria-hidden="true">
+              <line class="art-axis" x1="10" y1="170" x2="410" y2="170"/>
+              <rect class="art-bar art-bar--a" x="24"  y="110" width="38" height="60" rx="10"/>
+              <rect class="art-bar art-bar--b" x="78"  y="84"  width="38" height="86" rx="10"/>
+              <rect class="art-bar art-bar--a" x="132" y="124" width="38" height="46" rx="10"/>
+              <rect class="art-bar art-bar--c" x="186" y="42"  width="38" height="128" rx="10"/>
+              <rect class="art-bar art-bar--a" x="240" y="72"  width="38" height="98" rx="10"/>
+              <rect class="art-bar art-bar--b" x="294" y="102" width="38" height="68" rx="10"/>
+              <rect class="art-bar art-bar--a" x="348" y="130" width="38" height="40" rx="10"/>
+              <path class="art-line" d="M43 96 L97 70 L151 108 L205 28 L259 58 L313 88 L367 114"/>
+              <circle class="art-pt" cx="205" cy="28" r="7"/>
+            </svg>
+            <button class="tile__more" type="button" data-service="0" aria-haspopup="dialog">Ver detalle <span class="plus" aria-hidden="true"></span></button>
+          </article>
+
+          <article class="tile tile--2" data-reveal style="--d:80ms">
+            <div class="tile__top">
+              <span class="tile__num">02</span>
+              <span class="tile__icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><path d="M17 12l-2.7 20M31 12l2.7 20M8.2 22h31.6"/><path d="M10 12h28l4 20H6z"/><path d="M6 40h36M6 37.5v5M42 37.5v5"/></svg>
+              </span>
+            </div>
+            <h3 class="tile__title">Dimensionamiento fotovoltaico</h3>
+            <p class="tile__text">Cálculo técnico de la cantidad y configuración de paneles solares de acuerdo con las necesidades energéticas.</p>
+            <button class="tile__more" type="button" data-service="1" aria-haspopup="dialog">Ver detalle <span class="plus" aria-hidden="true"></span></button>
+          </article>
+
+          <article class="tile tile--3" data-reveal style="--d:140ms">
+            <div class="tile__top">
+              <span class="tile__num">03</span>
+              <span class="tile__icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><rect x="8" y="10" width="32" height="28" rx="5"/><path d="M14 19h9"/><path d="M14 25h2M18 25h2M22 25h1"/><path d="M27 25c1.5-4 3-4 4.5 0s3 4 4.500 0"/><path d="M16 38v4M32 38v4"/></svg>
+              </span>
+            </div>
+            <h3 class="tile__title">Selección de inversores</h3>
+            <p class="tile__text">Evaluación de potencia, voltaje, corriente y compatibilidad entre componentes.</p>
+            <button class="tile__more" type="button" data-service="2" aria-haspopup="dialog">Ver detalle <span class="plus" aria-hidden="true"></span></button>
+          </article>
+
+          <article class="tile tile--4" data-reveal style="--d:0ms">
+            <div class="tile__top">
+              <span class="tile__num">04</span>
+              <span class="tile__icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><rect x="6" y="15" width="32" height="18" rx="4"/><path d="M42 21v6"/><path d="M12 21v6M19 21v6M26 21v6"/></svg>
+              </span>
+            </div>
+            <h3 class="tile__title">Sistemas de almacenamiento</h3>
+            <p class="tile__text">Dimensionamiento conceptual de baterías y evaluación de necesidades de autonomía.</p>
+            <button class="tile__more" type="button" data-service="3" aria-haspopup="dialog">Ver detalle <span class="plus" aria-hidden="true"></span></button>
+          </article>
+
+          <article class="tile tile--5" data-reveal style="--d:80ms">
+            <div class="tile__top">
+              <span class="tile__num">05</span>
+              <span class="tile__icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><path d="M8 36l9-10 7 6 14-16"/><path d="M31 16h7v7"/><path d="M8 42h32"/></svg>
+              </span>
+            </div>
+            <h3 class="tile__title">Evaluación económica</h3>
+            <p class="tile__text">Estimación de inversión, ahorro potencial y periodo de recuperación, cuando se disponga de datos suficientes.</p>
+            <button class="tile__more" type="button" data-service="4" aria-haspopup="dialog">Ver detalle <span class="plus" aria-hidden="true"></span></button>
+          </article>
+
+          <article class="tile tile--6" data-reveal style="--d:0ms">
+            <div class="tile__top">
+              <span class="tile__num">06</span>
+              <span class="tile__icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><path d="M13 6h16l8 8v28H13z"/><path d="M29 6v8h8"/><path d="M18 22h14M18 28h14M18 34h8"/></svg>
+              </span>
+            </div>
+            <div class="tile__wide">
+              <h3 class="tile__title">Propuestas técnicas</h3>
+              <p class="tile__text">Elaboración de reportes con especificaciones técnicas y económicas del sistema recomendado.</p>
+            </div>
+            <button class="tile__more" type="button" data-service="5" aria-haspopup="dialog">Ver detalle <span class="plus" aria-hidden="true"></span></button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 03 · INGENIERÍA ============ -->
+    <section class="section eng" id="ingenieria" aria-labelledby="eng-title">
+      <div class="wrap">
+        <header class="section__head section__head--split" data-reveal>
+          <h2 id="eng-title" class="h2">Ingeniería y diseño fotovoltaico</h2>
+          <p class="lead">Explora cómo se conectan los componentes de un sistema solar. Todas las visualizaciones son educativas y no sustituyen un cálculo de ingeniería.</p>
+        </header>
+
+        <div class="tabs" data-reveal>
+          <div class="tabs__list" role="tablist" aria-label="Visualizaciones de ingeniería">
+            <button class="tab" role="tab" id="tab-sys" aria-controls="panel-sys" aria-selected="true" type="button">Sistema</button>
+            <button class="tab" role="tab" id="tab-con" aria-controls="panel-con" aria-selected="false" tabindex="-1" type="button">Conexiones</button>
+            <button class="tab" role="tab" id="tab-pan" aria-controls="panel-pan" aria-selected="false" tabindex="-1" type="button">Panel solar</button>
+          </div>
+
+          <!-- Tab 1 · Diagrama del sistema -->
+          <div class="tabpanel" role="tabpanel" id="panel-sys" aria-labelledby="tab-sys">
+            <div class="sys">
+              <div class="sys__stage">
+                <div class="sys__controls">
+                  <div class="seg" role="group" aria-label="Momento del día">
+                    <button class="seg__btn is-on" type="button" data-time="day" aria-pressed="true">Día</button>
+                    <button class="seg__btn" type="button" data-time="night" aria-pressed="false">Noche</button>
+                  </div>
+                  <p class="sys__status" id="sysStatus" aria-live="polite">De día, los paneles alimentan el consumo y el excedente puede almacenarse o enviarse a la red.</p>
+                </div>
+
+                <div class="diagram-wrap" id="diagramWrap">
+                <svg class="diagram" id="diagram" viewBox="0 0 900 540" role="group" aria-label="Diagrama del sistema fotovoltaico. Selecciona un componente para ver su detalle." focusable="false">
+                  <!-- conexiones -->
+                  <g class="edges">
+                    <g class="edge" data-edge="e1" data-nodes="panels inverter" data-kind="dc">
+                      <path class="edge__base" d="M235 120H300V270H355"/>
+                      <path class="edge__flow" d="M235 120H300V270H355"/>
+                      <text class="edge__label" x="268" y="108">CC</text>
+                    </g>
+                    <g class="edge" data-edge="e2" data-nodes="inverter load" data-kind="ac">
+                      <path class="edge__base" d="M545 270H605V400H665"/>
+                      <path class="edge__flow" d="M545 270H605V400H665"/>
+                      <text class="edge__label" x="618" y="262">CA</text>
+                    </g>
+                    <g class="edge" data-edge="e3" data-nodes="inverter battery" data-kind="dc">
+                      <path class="edge__base" d="M450 330V390"/>
+                      <path class="edge__flow" d="M450 330V390"/>
+                      <text class="edge__label" x="466" y="365">CC</text>
+                    </g>
+                    <g class="edge" data-edge="e4" data-nodes="inverter grid" data-kind="ac">
+                      <path class="edge__base" d="M450 210V120H665"/>
+                      <path class="edge__flow" d="M450 210V120H665"/>
+                      <text class="edge__label" x="548" y="108">CA</text>
+                    </g>
+                  </g>
+
+                  <!-- nodos -->
+                  <g class="node" data-node="panels" role="button" tabindex="0" aria-pressed="false" aria-label="Paneles solares">
+                    <rect class="node__bg" x="45" y="60" width="190" height="120" rx="22"/>
+                    <g class="node__art" transform="translate(70 76)">
+                      <path class="n-fill n-blue" d="M14 8h92l12 52H2z"/>
+                      <path class="n-line" d="M44 8L38 60M76 8l6 52M8 26h104M5 43h110"/>
+                      <path class="n-fill n-sun" d="M100 0a9 9 0 1 1 0 .1z" transform="translate(32 -2) scale(.7)"/>
+                    </g>
+                    <text class="node__title" x="140" y="160" text-anchor="middle">Paneles solares</text>
+                  </g>
+
+                  <g class="node" data-node="inverter" role="button" tabindex="0" aria-pressed="true" aria-label="Inversor">
+                    <rect class="node__bg" x="355" y="210" width="190" height="120" rx="22"/>
+                    <g class="node__art" transform="translate(395 226)">
+                      <rect class="n-fill n-white" x="0" y="0" width="110" height="60" rx="14"/>
+                      <path class="n-line n-line--dark" d="M16 22h26"/>
+                      <path class="n-line n-line--dark" d="M16 36h5M26 36h5M36 36h5"/>
+                      <path class="n-line n-line--dark" d="M62 30c5-14 11-14 16 0s11 14 16 0"/>
+                      <circle class="n-fill n-sun" cx="98" cy="10" r="4"/>
+                    </g>
+                    <text class="node__title" x="450" y="312" text-anchor="middle">Inversor</text>
+                  </g>
+
+                  <g class="node" data-node="battery" role="button" tabindex="0" aria-pressed="false" aria-label="Baterías">
+                    <rect class="node__bg" x="355" y="390" width="190" height="120" rx="22"/>
+                    <g class="node__art" transform="translate(392 410)">
+                      <rect class="n-fill n-white" x="0" y="0" width="108" height="56" rx="12"/>
+                      <rect class="n-fill n-white" x="108" y="18" width="8" height="20" rx="3"/>
+                      <rect class="n-fill n-sun" x="10" y="10" width="20" height="36" rx="6"/>
+                      <rect class="n-fill n-sun" x="36" y="10" width="20" height="36" rx="6"/>
+                      <rect class="n-fill n-blue" x="62" y="10" width="20" height="36" rx="6"/>
+                    </g>
+                    <text class="node__title" x="450" y="492" text-anchor="middle">Baterías</text>
+                  </g>
+
+                  <g class="node" data-node="grid" role="button" tabindex="0" aria-pressed="false" aria-label="Red eléctrica">
+                    <rect class="node__bg" x="665" y="60" width="190" height="120" rx="22"/>
+                    <g class="node__art" transform="translate(724 72)">
+                      <path class="n-line" d="M36 2v52M20 54l16-52 16 52M24 22h24M27 36h18M6 14h60M6 14v8M66 14v8"/>
+                      <path class="n-line" d="M0 18l6-4M72 18l-6-4"/>
+                    </g>
+                    <text class="node__title" x="760" y="160" text-anchor="middle">Red eléctrica</text>
+                  </g>
+
+                  <g class="node" data-node="load" role="button" tabindex="0" aria-pressed="false" aria-label="Consumo del inmueble">
+                    <rect class="node__bg" x="665" y="340" width="190" height="120" rx="22"/>
+                    <g class="node__art" transform="translate(722 352)">
+                      <path class="n-fill n-white" d="M6 30L38 4l32 26v28H6z"/>
+                      <path class="n-fill n-blue" d="M0 32L38 0l38 32-6 4L38 8 6 36z"/>
+                      <rect class="n-fill n-sun" x="30" y="36" width="16" height="22" rx="4"/>
+                    </g>
+                    <text class="node__title" x="760" y="440" text-anchor="middle">Consumo del inmueble</text>
+                  </g>
+                </svg>
+                </div>
+                <p class="sys__note sys__note--scroll">Desliza el esquema para verlo completo.</p>
+                <p class="sys__note">Esquema conceptual. La operación real depende del tipo de sistema (interconectado, híbrido o aislado).</p>
+              </div>
+
+              <aside class="detail" id="detail" aria-live="polite">
+                <p class="detail__tag" id="dTag">Componente</p>
+                <h3 class="detail__title" id="dTitle">Inversor</h3>
+                <p class="detail__text" id="dFunc"></p>
+                <h4 class="detail__sub">Características principales</h4>
+                <ul class="detail__list" id="dFeat"></ul>
+                <h4 class="detail__sub">Se relaciona con</h4>
+                <div class="detail__rel" id="dRel"></div>
+                <p class="detail__rel-text" id="dRelText"></p>
+              </aside>
+            </div>
+          </div>
+
+          <!-- Tab 2 · Serie y paralelo -->
+          <div class="tabpanel" role="tabpanel" id="panel-con" aria-labelledby="tab-con" hidden>
+            <div class="sp">
+              <div class="sp__stage">
+                <div class="sys__controls">
+                  <div class="seg" role="group" aria-label="Tipo de conexión">
+                    <button class="seg__btn is-on" type="button" data-conn="series" aria-pressed="true">En serie</button>
+                    <button class="seg__btn" type="button" data-conn="parallel" aria-pressed="false">En paralelo</button>
+                  </div>
+                </div>
+                <svg class="spdiagram" id="spdiagram" viewBox="0 0 800 380" data-mode="series" role="img" aria-label="Esquema conceptual de tres paneles conectados en serie o en paralelo hacia una carga." focusable="false">
+                  <!-- paneles -->
+                  <g class="sp-panel" transform="translate(110 130)"><rect class="sp-body" width="140" height="90" rx="14"/><path class="sp-cell" d="M47 0v90M93 0v90M0 30h140M0 60h140"/><text class="sp-pol sp-pol--n" x="-14" y="34" text-anchor="middle">−</text><text class="sp-pol sp-pol--p" x="154" y="34" text-anchor="middle">+</text></g>
+                  <g class="sp-panel" transform="translate(320 130)"><rect class="sp-body" width="140" height="90" rx="14"/><path class="sp-cell" d="M47 0v90M93 0v90M0 30h140M0 60h140"/><text class="sp-pol sp-pol--n" x="-14" y="34" text-anchor="middle">−</text><text class="sp-pol sp-pol--p" x="154" y="34" text-anchor="middle">+</text></g>
+                  <g class="sp-panel" transform="translate(530 130)"><rect class="sp-body" width="140" height="90" rx="14"/><path class="sp-cell" d="M47 0v90M93 0v90M0 30h140M0 60h140"/><text class="sp-pol sp-pol--n" x="-14" y="34" text-anchor="middle">−</text><text class="sp-pol sp-pol--p" x="154" y="34" text-anchor="middle">+</text></g>
+
+                  <!-- carga -->
+                  <g class="sp-load" transform="translate(716 150)">
+                    <rect class="sp-load__box" width="64" height="50" rx="12"/>
+                    <path class="sp-load__zig" d="M12 25h8l4-9 8 18 4-9h16"/>
+                  </g>
+
+                  <!-- cableado en serie -->
+                  <g class="wires wires--series">
+                    <path class="wire" d="M250 175H320"/>
+                    <path class="wire" d="M460 175H530"/>
+                    <path class="wire" d="M670 175H716"/>
+                    <path class="wire" d="M110 175H80V290H748V200"/>
+                  </g>
+
+                  <!-- cableado en paralelo -->
+                  <g class="wires wires--parallel">
+                    <path class="wire wire--pos" d="M250 175H264V84H748V150"/>
+                    <path class="wire wire--pos" d="M460 175H474V84"/>
+                    <path class="wire wire--pos" d="M670 175H684V84"/>
+                    <path class="wire wire--neg" d="M110 175H96V290H748V200"/>
+                    <path class="wire wire--neg" d="M320 175H306V290"/>
+                    <path class="wire wire--neg" d="M530 175H516V290"/>
+                  </g>
+                </svg>
+                <p class="sys__note">Esquema educativo, sin valores eléctricos. No sustituye un cálculo de ingeniería.</p>
+              </div>
+
+              <aside class="detail" aria-live="polite">
+                <p class="detail__tag" id="spTag">Conexión en serie</p>
+                <h3 class="detail__title" id="spTitle">Un solo camino para la corriente</h3>
+                <p class="detail__text" id="spText"></p>
+                <div class="pills" id="spPills"></div>
+                <h4 class="detail__sub">Qué cambia en el esquema</h4>
+                <ul class="detail__list" id="spList"></ul>
+              </aside>
+            </div>
+          </div>
+
+          <!-- Tab 3 · Panel 3D -->
+          <div class="tabpanel" role="tabpanel" id="panel-pan" aria-labelledby="tab-pan" hidden>
+            <div class="pv">
+              <div class="pv__stage-wrap">
+                <div class="pv__stage" id="pvStage" tabindex="0" role="group" aria-label="Modelo 3D de un panel solar. Arrastra o usa las flechas del teclado para girarlo.">
+                  <div class="pv__rig" id="pvRig">
+                    <div class="pv__layer pv__layer--back" data-layer="back" style="--i:0"><span class="pv__jbox"></span></div>
+                    <div class="pv__layer pv__layer--cells" data-layer="cells" style="--i:1"></div>
+                    <div class="pv__layer pv__layer--frame" data-layer="frame" style="--i:2"></div>
+                    <div class="pv__layer pv__layer--glass" data-layer="glass" style="--i:3"></div>
+                  </div>
+                </div>
+                <div class="pv__controls">
+                  <button class="icon-btn" type="button" data-rot="left" aria-label="Girar a la izquierda"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+                  <button class="icon-btn" type="button" data-rot="up" aria-label="Inclinar hacia arriba"><svg viewBox="0 0 24 24"><path d="M5 15l7-7 7 7"/></svg></button>
+                  <button class="icon-btn" type="button" data-rot="down" aria-label="Inclinar hacia abajo"><svg viewBox="0 0 24 24"><path d="M5 9l7 7 7-7"/></svg></button>
+                  <button class="icon-btn" type="button" data-rot="right" aria-label="Girar a la derecha"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+                  <button class="btn btn--sm btn--sun" type="button" id="pvExplode" aria-pressed="false">Vista explosionada</button>
+                  <button class="btn btn--sm btn--line" type="button" id="pvReset">Restablecer</button>
+                </div>
+                <p class="sys__note pv__hint">Arrastra para girar el panel. En pantallas táctiles, desliza horizontalmente o usa los botones.</p>
+              </div>
+
+              <aside class="detail">
+                <p class="detail__tag">Anatomía de un módulo</p>
+                <h3 class="detail__title">Capas de un panel solar</h3>
+                <ul class="layers" id="pvLayers">
+                  <li><button type="button" class="layers__btn" data-layer="glass"><span class="layers__sw layers__sw--glass"></span><span><strong>Vidrio templado</strong><em>Protege las celdas y deja pasar la luz.</em></span></button></li>
+                  <li><button type="button" class="layers__btn" data-layer="frame"><span class="layers__sw layers__sw--frame"></span><span><strong>Marco de aluminio</strong><em>Da rigidez al módulo y facilita su montaje.</em></span></button></li>
+                  <li><button type="button" class="layers__btn" data-layer="cells"><span class="layers__sw layers__sw--cells"></span><span><strong>Celdas fotovoltaicas</strong><em>Convierten la luz en corriente continua.</em></span></button></li>
+                  <li><button type="button" class="layers__btn" data-layer="back"><span class="layers__sw layers__sw--back"></span><span><strong>Lámina posterior y caja de conexiones</strong><em>Aísla el módulo y reúne las salidas eléctricas.</em></span></button></li>
+                </ul>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 04 · METODOLOGÍA ============ -->
+    <section class="section method" id="metodologia" aria-labelledby="method-title">
+      <div class="wrap">
+        <header class="section__head" data-reveal>
+          <h2 id="method-title" class="h2">Cuatro etapas, una propuesta clara.</h2>
+          <p class="lead">Un proceso ordenado que va de entender el consumo a presentar una recomendación técnica y económica.</p>
+        </header>
+
+        <ol class="steps" id="steps" data-reveal style="--p:0">
+          <li class="step is-active" data-step="0">
+            <button class="step__head" type="button" aria-expanded="true" aria-controls="step-body-0" id="step-head-0">
+              <span class="step__node" aria-hidden="true"></span>
+              <span class="step__num">01</span>
+              <span class="step__name">Analizamos</span>
+            </button>
+            <div class="step__body" id="step-body-0" role="region" aria-labelledby="step-head-0">
+              <svg class="step__art" viewBox="0 0 200 160" focusable="false" aria-hidden="true">
+                <circle class="f-sky" cx="100" cy="82" r="68"/>
+                <rect class="f-blue" x="46" y="86" width="22" height="40" rx="6"/>
+                <rect class="f-navy" x="76" y="62" width="22" height="64" rx="6"/>
+                <rect class="f-sun" x="106" y="76" width="22" height="50" rx="6"/>
+                <rect class="f-blue" x="136" y="50" width="22" height="76" rx="6"/>
+                <circle class="f-lens" cx="118" cy="74" r="34"/>
+                <path class="f-handle" d="M142 98l26 26"/>
+              </svg>
+              <div class="step__text">
+                <h3>Comprendemos cómo y cuándo se usa la energía.</h3>
+                <p>Comprendemos las necesidades energéticas y evaluamos los patrones de consumo.</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="step" data-step="1">
+            <button class="step__head" type="button" aria-expanded="false" aria-controls="step-body-1" id="step-head-1">
+              <span class="step__node" aria-hidden="true"></span>
+              <span class="step__num">02</span>
+              <span class="step__name">Dimensionamos</span>
+            </button>
+            <div class="step__body" id="step-body-1" role="region" aria-labelledby="step-head-1">
+              <svg class="step__art" viewBox="0 0 200 160" focusable="false" aria-hidden="true">
+                <circle class="f-sun-soft" cx="100" cy="82" r="68"/>
+                <path class="f-navy" d="M52 52h96l14 58H38z"/>
+                <path class="f-line" d="M84 52L76 110M116 52l8 58M45 72h110M41 91h118"/>
+                <path class="f-line-dark" d="M38 130h124M38 124v12M162 124v12"/>
+              </svg>
+              <div class="step__text">
+                <h3>Definimos la configuración fotovoltaica.</h3>
+                <p>Establecemos la configuración fotovoltaica de acuerdo con las condiciones del proyecto.</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="step" data-step="2">
+            <button class="step__head" type="button" aria-expanded="false" aria-controls="step-body-2" id="step-head-2">
+              <span class="step__node" aria-hidden="true"></span>
+              <span class="step__num">03</span>
+              <span class="step__name">Seleccionamos</span>
+            </button>
+            <div class="step__body" id="step-body-2" role="region" aria-labelledby="step-head-2">
+              <svg class="step__art" viewBox="0 0 200 160" focusable="false" aria-hidden="true">
+                <circle class="f-sky" cx="100" cy="82" r="68"/>
+                <rect class="f-navy" x="36" y="54" width="50" height="38" rx="8"/>
+                <rect class="f-white" x="92" y="54" width="42" height="38" rx="8"/>
+                <rect class="f-blue" x="140" y="54" width="30" height="38" rx="8"/>
+                <path class="f-line" d="M46 66h30M46 74h30M46 82h18"/>
+                <path class="f-line-dark" d="M101 74c4-10 8-10 12 0s8 10 12 0"/>
+                <circle class="f-sun" cx="100" cy="118" r="20"/>
+                <path class="f-check" d="M90 118l7 7 13-14"/>
+              </svg>
+              <div class="step__text">
+                <h3>Verificamos que cada componente encaje.</h3>
+                <p>Evaluamos los componentes y verificamos su compatibilidad técnica.</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="step" data-step="3">
+            <button class="step__head" type="button" aria-expanded="false" aria-controls="step-body-3" id="step-head-3">
+              <span class="step__node" aria-hidden="true"></span>
+              <span class="step__num">04</span>
+              <span class="step__name">Proponemos</span>
+            </button>
+            <div class="step__body" id="step-body-3" role="region" aria-labelledby="step-head-3">
+              <svg class="step__art" viewBox="0 0 200 160" focusable="false" aria-hidden="true">
+                <circle class="f-blue-soft" cx="100" cy="82" r="68"/>
+                <rect class="f-white" x="58" y="26" width="84" height="108" rx="12"/>
+                <path class="f-line-dark" d="M72 54h56M72 68h56M72 82h34"/>
+                <circle class="f-sun" cx="122" cy="108" r="17"/>
+                <path class="f-check f-check--dark" d="M114 108l6 6 11-12"/>
+              </svg>
+              <div class="step__text">
+                <h3>Entregamos una recomendación que se entiende.</h3>
+                <p>Integramos la evaluación técnica y económica en una propuesta clara.</p>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ 05 · BENEFICIOS ============ -->
+    <section class="section benefits" id="beneficios" aria-labelledby="ben-title">
+      <div class="wrap benefits__grid">
+        <div class="benefits__side" data-reveal>
+          <h2 id="ben-title" class="h2">Lo que obtienes al trabajar con SVOLTS.</h2>
+          <p class="lead">Seis principios que guían cada proyecto. Pasa el cursor o enfoca un principio para ubicarlo en la órbita.</p>
+          <svg class="orbit" id="orbit" viewBox="0 0 360 360" focusable="false" aria-hidden="true">
+            <circle class="orbit__ring" cx="180" cy="180" r="140"/>
+            <circle class="orbit__ring orbit__ring--in" cx="180" cy="180" r="92"/>
+            <circle class="orbit__sun" cx="180" cy="180" r="42"/>
+            <path class="orbit__bolt" d="M187 160 L170 184 H181 L177 202 L194 177 H183 Z"/>
+            <g id="orbitNodes"></g>
+          </svg>
+        </div>
+
+        <ul class="blist" id="blist">
+          <li class="bitem" tabindex="0" data-b="0" data-reveal><span class="bitem__n">1</span><div><h3>Soluciones basadas en el consumo energético real</h3><p>Partimos de lo que el inmueble realmente consume, no de supuestos genéricos.</p></div></li>
+          <li class="bitem" tabindex="0" data-b="1" data-reveal><span class="bitem__n">2</span><div><h3>Selección de componentes con especificaciones verificables</h3><p>Cada elemento se elige con datos de ficha técnica que se pueden revisar.</p></div></li>
+          <li class="bitem" tabindex="0" data-b="2" data-reveal><span class="bitem__n">3</span><div><h3>Evaluaciones económicas transparentes</h3><p>Los supuestos se muestran de forma explícita para que sean fáciles de evaluar.</p></div></li>
+          <li class="bitem" tabindex="0" data-b="3" data-reveal><span class="bitem__n">4</span><div><h3>Aprovechamiento de energías renovables</h3><p>La luz solar es el recurso central de cada diseño.</p></div></li>
+          <li class="bitem" tabindex="0" data-b="4" data-reveal><span class="bitem__n">5</span><div><h3>Información técnica comprensible</h3><p>Explicamos la ingeniería con claridad, sin perder precisión.</p></div></li>
+          <li class="bitem" tabindex="0" data-b="5" data-reveal><span class="bitem__n">6</span><div><h3>Diseño orientado a las necesidades del cliente</h3><p>La propuesta se adapta al proyecto, no al revés.</p></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ 05b · COTIZACIÓN ============ -->
+    <section class="section quote" id="cotizacion" aria-labelledby="quote-title">
+      <div class="wrap">
+        <header class="section__head section__head--split" data-reveal>
+          <div>
+            <p class="eyebrow">Opciones de cotización</p>
+            <h2 id="quote-title" class="h2">Cotiza tu sistema al nivel de detalle que necesitas.</h2>
+          </div>
+          <p class="lead">El Simulador de Celdas Solares calcula todo en tu navegador, al instante. Empieza con una estimación de un minuto y profundiza cuando quieras revisar el voltaje, la corriente y cada componente.</p>
+        </header>
+
+        <ol class="quote__grid">
+          <li class="qcard" data-reveal>
+            <span class="qcard__tag">Modo básico</span>
+            <h3>Estimación rápida</h3>
+            <p>Con el consumo de tu recibo y el precio del kWh obtienes los paneles necesarios, la generación mensual y el ahorro estimado.</p>
+            <ul class="qcard__list"><li>Consumo mensual o bimestral</li><li>Paneles y potencia del sistema</li><li>Ahorro anual aproximado</li></ul>
+            <a class="btn btn--primary" href="simulador.html#basico" data-sim-link>Estimar en 1 minuto</a>
+          </li>
+          <li class="qcard qcard--vi" data-reveal style="--d:100ms">
+            <span class="qcard__tag">Modo avanzado</span>
+            <h3>Voltaje y corriente</h3>
+            <p>Curva I-V del arreglo con irradiancia, temperatura, conexión serie/paralelo y carga. Muestra el punto de máxima potencia y dónde trabaja el sistema.</p>
+            <ul class="qcard__list"><li>Voc, Isc, Vmp e Imp corregidos</li><li>Serie suma voltaje, paralelo suma corriente</li><li>Recta de carga y seguidor MPPT</li></ul>
+            <a class="btn btn--sun" href="simulador.html#curva" data-sim-link>Analizar V e I</a>
+          </li>
+          <li class="qcard" data-reveal style="--d:200ms">
+            <span class="qcard__tag">Modo avanzado</span>
+            <h3>Cotización completa</h3>
+            <p>Consumo por equipo, paneles, inversor y baterías de un catálogo con precios y fichas reales, retorno de inversión a 25 años y reporte para el cliente.</p>
+            <ul class="qcard__list"><li>Verificación eléctrica del inversor</li><li>Inversión, ahorro y recuperación</li><li>Reporte listo para PDF</li></ul>
+            <a class="btn btn--primary" href="simulador.html#consumo" data-sim-link>Armar la cotización</a>
+          </li>
+        </ol>
+
+        <div class="quote__cta" data-reveal>
+          <p>Todos los cálculos son preliminares y se pueden revisar paso a paso.</p>
+          <a class="btn btn--sun btn--lg btn--sim" href="simulador.html" data-sim-link><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>Simulador de Celdas Solares</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 06 · SOSTENIBILIDAD ============ -->
+    <section class="section sust" id="sostenibilidad" aria-labelledby="sust-title">
+      <div class="wrap">
+        <header class="section__head" data-reveal>
+          <h2 id="sust-title" class="h2">Energía solar con criterio responsable.</h2>
+          <p class="lead">SVOLTS entiende la ingeniería fotovoltaica como una herramienta para aprovechar mejor un recurso renovable.</p>
+        </header>
+
+        <div class="ods">
+          <article class="ods__card ods__card--7" data-reveal>
+            <svg class="ods__art" viewBox="0 0 320 240" focusable="false" aria-hidden="true">
+              <g class="ods7-rays"><path d="M236 120L258 120M214 174L229 189M160 196L160 218M106 174L91 189M84 120L62 120M106 66L91 51M160 44L160 22M214 66L229 51"/></g>
+              <circle class="ods7-sun" cx="160" cy="120" r="56"/>
+              <path class="ods7-bolt" d="M170 88 L146 126 H162 L156 154 L182 114 H166 Z"/>
+            </svg>
+            <div class="ods__body">
+              <p class="ods__tag">ODS 07</p>
+              <h3>Energía asequible y no contaminante</h3>
+              <p>La energía solar fotovoltaica aprovecha un recurso renovable. Diseñar sistemas ajustados al consumo real ayuda a usar mejor la energía que se genera.</p>
+              <details class="more">
+                <summary>Cómo se relaciona con nuestro trabajo</summary>
+                <p>Al medir primero el consumo y dimensionar después, evitamos configuraciones que no corresponden a la necesidad del proyecto y favorecemos el acceso a una energía limpia.</p>
+              </details>
+            </div>
+          </article>
+
+          <article class="ods__card ods__card--12" data-reveal style="--d:100ms">
+            <svg class="ods__art" viewBox="0 0 320 240" focusable="false" aria-hidden="true">
+              <g class="ods12-loop">
+                <path class="ods12-arc" d="M160 52a68 68 0 0 1 58 33"/>
+                <path class="ods12-arc" d="M228 150a68 68 0 0 1-52 38"/>
+                <path class="ods12-arc" d="M116 184a68 68 0 0 1-22-96"/>
+                <path class="ods12-head" d="M218 70l8 20-22-2z"/>
+                <path class="ods12-head" d="M168 202l-16-14 22-6z"/>
+                <path class="ods12-head" d="M82 74l24 4-12 18z"/>
+              </g>
+              <circle class="ods12-core" cx="160" cy="120" r="26"/>
+              <path class="ods12-check" d="M148 120l9 9 16-18"/>
+            </svg>
+            <div class="ods__body">
+              <p class="ods__tag">ODS 12</p>
+              <h3>Producción y consumo responsables</h3>
+              <p>Conocer cuánta energía se consume, y cuándo, permite dimensionar sin excesos y elegir componentes con criterio, para usar los recursos de forma consciente.</p>
+              <details class="more">
+                <summary>Cómo se relaciona con nuestro trabajo</summary>
+                <p>La selección de componentes con especificaciones verificables y las evaluaciones transparentes ayudan a tomar decisiones informadas y proporcionadas.</p>
+              </details>
+            </div>
+          </article>
+        </div>
+        <p class="footnote" data-reveal>Los Objetivos de Desarrollo Sostenible (ODS) forman parte de la Agenda 2030 de la ONU. Esta sección describe una relación conceptual con ellos y no implica certificaciones ni alianzas oficiales.</p>
+      </div>
+    </section>
+
+    <!-- ============ 07 · CONTACTO / CIERRE ============ -->
+    <section class="section closing" id="contacto" aria-labelledby="closing-title">
+      <svg class="closing__sun" viewBox="0 0 600 300" focusable="false" aria-hidden="true">
+        <circle class="cs-3" cx="300" cy="300" r="290"/>
+        <circle class="cs-2" cx="300" cy="300" r="210"/>
+        <circle class="cs-1" cx="300" cy="300" r="130"/>
+      </svg>
+      <div class="wrap closing__inner">
+        <h2 id="closing-title" class="closing__title" data-reveal>El siguiente paso hacia una energía más inteligente.</h2>
+        <p class="closing__text" data-reveal>Cada proyecto comienza con una comprensión precisa de las necesidades energéticas. En SVOLTS desarrollamos soluciones de ingeniería solar orientadas al aprovechamiento eficiente de la energía.</p>
+        <div class="closing__actions" data-reveal><a class="btn btn--sun btn--lg" href="#servicios">Conoce nuestras soluciones</a><a class="btn btn--line btn--lg" href="simulador.html" data-sim-link>Simulador de Celdas Solares</a></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ PIE ============ -->
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <div class="footer__brand">
+        <img src="assets/logo-horizontal.png" alt="SVOLTS Ingeniería Solar" width="176" height="50">
+        <p>Transformamos la luz solar en energía inteligente.</p>
+      </div>
+      <nav aria-label="Pie de página">
+        <ul class="footer__nav">
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#ingenieria">Ingeniería</a></li>
+          <li><a href="#metodologia">Metodología</a></li>
+          <li><a href="#beneficios">Beneficios</a></li>
+          <li><a href="#sostenibilidad">Sostenibilidad</a></li>
+          <li><a href="#cotizacion">Cotización</a></li>
+          <li><a href="simulador.html" data-sim-link>Simulador de Celdas Solares</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="wrap footer__author">
+      <div class="author" aria-label="Autoría del proyecto">
+        <span class="author__tag">Proyecto académico</span>
+        <dl class="author__list">
+          <div><dt>Autor</dt><dd>Rodrigo Espada</dd></div>
+          <div><dt>Institución</dt><dd>Tecnológico de Monterrey</dd></div>
+          <div><dt>Carrera</dt><dd>Ingeniería Industrial</dd></div>
+          <div><dt>Matrícula</dt><dd>A01742679</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="wrap footer__legal">
+      <p>© 2026 SVOLTS · Ingeniería Solar. Las visualizaciones de este sitio son educativas y no sustituyen un cálculo de ingeniería.</p>
+    </div>
+  </footer>
+
+  <!-- Volver arriba con anillo de progreso -->
+  <button class="totop" id="totop" type="button" aria-label="Volver al inicio">
+    <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+      <circle class="totop__track" cx="24" cy="24" r="21"/>
+      <circle class="totop__ring" id="totopRing" cx="24" cy="24" r="21"/>
+      <path class="totop__arrow" d="M17 27l7-7 7 7"/>
+    </svg>
+  </button>
+
+  <!-- Modal de servicios -->
+  <dialog class="modal" id="svcDialog" aria-labelledby="svcTitle">
+    <div class="modal__card">
+      <header class="modal__head">
+        <span class="modal__num" id="svcNum">01</span>
+        <h3 class="modal__title" id="svcTitle">Servicio</h3>
+        <button class="icon-btn modal__close" type="button" id="svcClose" aria-label="Cerrar detalle"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </header>
+      <p class="modal__lead" id="svcLead"></p>
+      <div class="modal__cols">
+        <section><h4>Qué hacemos</h4><ul id="svcDo"></ul></section>
+        <section><h4>Qué evaluamos</h4><ul id="svcEval"></ul></section>
+        <section><h4>Qué entregamos</h4><p id="svcOut"></p></section>
+      </div>
+      <footer class="modal__foot">
+        <button class="btn btn--sm btn--line" type="button" id="svcPrev">Anterior</button>
+        <span class="modal__count" id="svcCount" aria-hidden="true">1 / 6</span>
+        <button class="btn btn--sm btn--primary" type="button" id="svcNext">Siguiente</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

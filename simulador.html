@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Simulador de Celdas Solares · SVOLTS</title>
+  <meta name="description" content="Simulador de Celdas Solares de SVOLTS (versión 2): modo básico para estimar generación y ahorro, y modo avanzado con curva voltaje-corriente, inversor, baterías, retorno y reporte en PDF.">
+  <meta name="theme-color" content="#0B1F3A">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="simulador.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="sim-page">
+  <a class="skip" href="#app">Saltar al simulador</a>
+
+  <header class="nav" id="nav">
+    <div class="nav__bar">
+      <a class="brand" href="index.html#inicio" aria-label="SVOLTS Ingeniería Solar, ir al inicio">
+        <img src="assets/logo-horizontal.png" alt="SVOLTS Ingeniería Solar" width="176" height="50">
+      </a>
+      <nav class="nav__menu" id="menu" aria-label="Principal">
+        <ul class="nav__list">
+          <li><a href="index.html#inicio">Inicio</a></li>
+          <li><a href="index.html#servicios">Servicios</a></li>
+          <li><a href="index.html#ingenieria">Ingeniería</a></li>
+          <li><a href="index.html#metodologia">Metodología</a></li>
+          <li><a href="simulador.html" class="is-active" aria-current="page">Simulador C.S.</a></li>
+          <li><a href="index.html#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ================= PORTADA ================= -->
+    <section class="simhero" aria-labelledby="sim-title">
+      <svg class="simhero__sun" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+        <circle cx="200" cy="200" r="190" fill="#F5A623" opacity=".14"/>
+        <circle cx="200" cy="200" r="130" fill="#F5A623" opacity=".2"/>
+        <circle cx="200" cy="200" r="74" fill="#F5A623"/>
+      </svg>
+      <div class="wrap simhero__inner">
+        <p class="chip chip--sun"><span class="chip__dot"></span>Versión 2 · todo se calcula en tu navegador</p>
+        <h1 id="sim-title" class="simhero__title">Simulador de Celdas Solares</h1>
+        <p class="simhero__lead">Usa el <strong>modo básico</strong> para estimar en segundos cuántos paneles necesitas y cuánto ahorrarías. Cambia al <strong>modo avanzado</strong> para estudiar el voltaje y la corriente del arreglo, verificar el inversor y las baterías y generar la cotización completa.</p>
+        <div class="simhero__actions">
+          <a class="btn btn--sun btn--lg" href="#basico" data-go="basico">Modo básico</a>
+          <a class="btn btn--line btn--lg" href="#curva" data-go="curva">Modo avanzado</a>
+        </div>
+        <p class="simhero__author">Desarrollado por <strong>Rodrigo Espada</strong> · Ingeniería Industrial · Tec de Monterrey</p>
+      </div>
+    </section>
+
+    <!-- ================= APLICACIÓN ================= -->
+    <section class="sim" id="app" aria-label="Simulador">
+      <div class="wrap">
+        <div class="sim__top">
+          <div class="simmode" role="group" aria-label="Modo del simulador">
+            <button class="simmode__btn" type="button" data-mode="basico" aria-pressed="true">Básico</button>
+            <button class="simmode__btn" type="button" data-mode="avanzado" aria-pressed="false">Avanzado</button>
+          </div>
+          <nav class="stepper" id="stepper" aria-label="Pasos del modo avanzado">
+            <button class="sstep" type="button" data-go="curva" style="--c:var(--sun);--on:var(--navy)"><span class="sstep__n sstep__n--vi">V·I</span><span class="sstep__t">Curva I-V</span><span class="sstep__s" aria-hidden="true"></span></button>
+            <button class="sstep" type="button" data-go="consumo" style="--c:var(--blue);--on:#fff"><span class="sstep__n">1</span><span class="sstep__t">Consumo</span><span class="sstep__s" aria-hidden="true"></span></button>
+            <button class="sstep" type="button" data-go="paneles" style="--c:var(--sun);--on:var(--navy)"><span class="sstep__n">2</span><span class="sstep__t">Paneles</span><span class="sstep__s" aria-hidden="true"></span></button>
+            <button class="sstep" type="button" data-go="inversor" style="--c:var(--navy-3);--on:#fff"><span class="sstep__n">3</span><span class="sstep__t">Inversor</span><span class="sstep__s" aria-hidden="true"></span></button>
+            <button class="sstep" type="button" data-go="baterias" style="--c:var(--sky-3);--on:var(--navy)"><span class="sstep__n">4</span><span class="sstep__t">Baterías</span><span class="sstep__s" aria-hidden="true"></span></button>
+            <button class="sstep" type="button" data-go="economia" style="--c:var(--blue-deep);--on:#fff"><span class="sstep__n">5</span><span class="sstep__t">Economía</span><span class="sstep__s" aria-hidden="true"></span></button>
+            <button class="sstep" type="button" data-go="reporte" style="--c:var(--sun);--on:var(--navy)"><span class="sstep__n">6</span><span class="sstep__t">Reporte</span><span class="sstep__s" aria-hidden="true"></span></button>
+          </nav>
+          <button class="btn btn--sm btn--ghost cat-open" type="button" data-go="catalogo" id="catOpen">Catálogo</button>
+        </div>
+
+        <div class="sim__grid">
+          <div class="sim__main" id="main" tabindex="-1">
+
+            <!-- ===== MODO BÁSICO ===== -->
+            <section class="view" data-view="basico" aria-labelledby="t-basico">
+              <header class="view__head">
+                <p class="eyebrow-s">Modo básico</p>
+                <h2 id="t-basico" class="h3">Estimación rápida de generación solar</h2>
+                <p class="lead">Escribe el consumo de tu recibo de luz y lo que pagas por kWh. El resultado cambia al instante, sin botones de calcular.</p>
+              </header>
+
+              <div class="fields">
+                <label class="field field--key" for="b-kwh"><span class="field__label">Consumo del recibo (kWh)</span>
+                  <input id="b-kwh" type="number" min="0" step="1" inputmode="decimal" data-bind="basic.kwh">
+                  <span class="field__hint">Aparece en tu recibo de CFE como "consumo" o "kWh".</span></label>
+                <fieldset class="field field--radio">
+                  <legend class="field__label">El recibo es…</legend>
+                  <div class="pills">
+                    <label class="pillopt"><input type="radio" name="b-period" value="1"><span>Mensual</span></label>
+                    <label class="pillopt"><input type="radio" name="b-period" value="2"><span>Bimestral</span></label>
+                  </div>
+                  <span class="field__hint" id="b-periodHint"></span>
+                </fieldset>
+                <label class="field field--key" for="b-tariff"><span class="field__label">Precio de la energía (MXN/kWh)</span>
+                  <input id="b-tariff" type="number" min="0" step="0.01" inputmode="decimal" data-bind="econ.tariff">
+                  <span class="field__hint">Divide el importe de energía del recibo entre los kWh.</span></label>
+                <label class="field" for="b-hsp"><span class="field__label">Horas solar pico del lugar (HSP)</span>
+                  <input id="b-hsp" type="number" min="1" max="9" step="0.1" inputmode="decimal" data-bind="site.hsp">
+                  <span class="field__hint">Horas equivalentes a 1000 W/m² al día. Consulta un atlas solar de tu ciudad.</span></label>
+                <label class="field field--wide" for="b-panel"><span class="field__label">Panel del catálogo</span>
+                  <select id="b-panel" name="b-panel"></select></label>
+              </div>
+
+              <div class="tiles tiles--big" id="basicTiles" aria-live="polite"></div>
+
+              <div class="bcompare" id="basicCompare"></div>
+
+              <div class="bpanels">
+                <div class="bpanels__head"><h3 class="h5">Tus paneles</h3><p class="note" id="basicPanelsNote"></p></div>
+                <div class="bpanels__grid" id="basicPanels" aria-hidden="true"></div>
+              </div>
+
+              <details class="learn">
+                <summary>Supuestos de la estimación</summary>
+                <p>Potencia necesaria = consumo mensual ÷ (30.4 días × HSP × PR). Se usa un rendimiento global (PR) de <span id="b-pr"></span>, que agrupa pérdidas por temperatura, suciedad, cableado e inversor.</p>
+                <p>El ahorro supone que la energía solar solo cubre tu propio consumo (no se vende ni se acumula el excedente). El costo considera únicamente los paneles del catálogo, sin IVA, sin inversor, estructura ni instalación: la cotización completa está en el modo avanzado.</p>
+              </details>
+
+              <footer class="view__nav">
+                <span></span>
+                <button class="btn btn--primary" type="button" data-go="curva">Pasar al modo avanzado</button>
+              </footer>
+            </section>
+
+            <!-- ===== MODO AVANZADO · CURVA I-V ===== -->
+            <section class="view" data-view="curva" aria-labelledby="t-curva" hidden>
+              <header class="view__head">
+                <p class="eyebrow-s">Modo avanzado</p>
+                <h2 id="t-curva" class="h3">Voltaje y corriente del arreglo</h2>
+                <p class="lead">Cada celda entrega más corriente con más sol y menos voltaje con más calor. Mueve la irradiancia, la temperatura, las conexiones en serie y en paralelo y la carga, y observa dónde trabaja el arreglo.</p>
+              </header>
+
+              <figure class="vi-fig">
+                <div class="vi-chart" id="viChart"></div>
+                <figcaption class="vi-legend">
+                  <span><i class="lg lg--i"></i>Corriente I(V)</span>
+                  <span><i class="lg lg--p"></i>Potencia P(V)</span>
+                  <span><i class="lg lg--ref"></i>Referencia a 1000 W/m² y 25 °C</span>
+                  <span><i class="lg lg--load"></i>Recta de carga I = V/R</span>
+                </figcaption>
+              </figure>
+
+              <div class="tiles" id="viTiles" aria-live="polite"></div>
+              <p class="vi-note" id="viNote"></p>
+
+              <div class="vi-controls">
+                <div class="vi-group">
+                  <h3 class="h5">Módulo y condiciones</h3>
+                  <label class="field" for="vi-panel"><span class="field__label">Panel del catálogo</span><select id="vi-panel" name="vi-panel"></select></label>
+                  <label class="field" for="vi-g"><span class="field__label">Irradiancia <output id="vi-gOut" for="vi-g"></output></span>
+                    <input id="vi-g" type="range" min="100" max="1200" step="10" data-bind="vi.g"></label>
+                  <label class="field" for="vi-ta"><span class="field__label">Temperatura ambiente <output id="vi-taOut" for="vi-ta"></output></span>
+                    <input id="vi-ta" type="range" min="-5" max="50" step="1" data-bind="vi.ta"></label>
+                  <div class="fields fields--2">
+                    <label class="field" for="vi-noct"><span class="field__label">NOCT (°C)</span><input id="vi-noct" type="number" min="35" max="55" step="1" data-bind="vi.noct"></label>
+                    <label class="field" for="vi-tcisc"><span class="field__label">Coef. de Isc (%/°C)</span><input id="vi-tcisc" type="number" min="0" max="0.2" step="0.005" data-bind="vi.tcIsc"></label>
+                  </div>
+                </div>
+                <div class="vi-group">
+                  <h3 class="h5">Conexión</h3>
+                  <div class="fields fields--2">
+                    <label class="field" for="vi-ns"><span class="field__label">Módulos en serie</span><input id="vi-ns" type="number" min="1" max="30" step="1" data-bind="vi.ns"><span class="field__hint">Suman voltaje.</span></label>
+                    <label class="field" for="vi-np"><span class="field__label">Cadenas en paralelo</span><input id="vi-np" type="number" min="1" max="10" step="1" data-bind="vi.np"><span class="field__hint">Suman corriente.</span></label>
+                  </div>
+                  <h3 class="h5">Carga</h3>
+                  <label class="check" for="vi-mppt"><input id="vi-mppt" type="checkbox" data-bind="vi.mppt"><span><strong>Seguidor MPPT</strong><small>Como un inversor: ajusta la carga para trabajar siempre en el punto de máxima potencia.</small></span></label>
+                  <label class="field" for="vi-rlog"><span class="field__label">Resistencia de carga <output id="vi-rOut" for="vi-rlog"></output></span>
+                    <input id="vi-rlog" type="range" min="-1" max="2.7" step="0.005"></label>
+                  <button class="btn btn--sm btn--line" type="button" id="viToMpp">Fijar R en el punto de máxima potencia</button>
+                </div>
+              </div>
+
+              <details class="learn">
+                <summary>Cómo se calcula la curva</summary>
+                <p>Se usa el modelo explícito de un diodo a partir de los cuatro datos de la ficha (Voc, Isc, Vmp, Imp): I(V) = Isc · [1 − C1 · (e<sup>V/(C2·Voc)</sup> − 1)], con C2 = (Vmp/Voc − 1) / ln(1 − Imp/Isc) y C1 = (1 − Imp/Isc) · e<sup>−Vmp/(C2·Voc)</sup>. La curva pasa por la corriente de corto circuito y por el punto (Vmp, Imp) de la ficha.</p>
+                <p>La corriente crece en proporción a la irradiancia y un poco con la temperatura (coeficiente de Isc). El voltaje baja con la temperatura (coeficiente de Voc de la ficha) y con poca luz. La temperatura de celda se estima con Tc = Ta + (NOCT − 20)/800 × G.</p>
+                <p>En serie se suman los voltajes (V = Ns · V<sub>módulo</sub>) y en paralelo las corrientes (I = Np · I<sub>módulo</sub>). Con una resistencia fija, el punto de operación es el cruce de la curva con la recta de Ohm I = V/R. Es una aproximación: no sustituye la curva medida por el fabricante.</p>
+              </details>
+
+              <details class="learn">
+                <summary>Tabla de puntos de la curva</summary>
+                <div class="tablewrap"><table class="vi-table" id="viTable"></table></div>
+              </details>
+
+              <footer class="view__nav">
+                <button class="btn btn--ghost" type="button" data-go="basico">Volver al modo básico</button>
+                <button class="btn btn--primary" type="button" data-go="consumo">Siguiente: consumo</button>
+              </footer>
+            </section>
+
+            <!-- ===== 1. CONSUMO ===== -->
+            <section class="view" data-view="consumo" aria-labelledby="t-consumo" hidden>
+              <header class="view__head">
+                <h2 id="t-consumo" class="h3">¿Cuánto consume el aula?</h2>
+                <p class="lead">Anota cada equipo con su cantidad, su potencia y las horas que funciona al día. Con eso se calcula la potencia que debe soportar el sistema y la energía que debe producir.</p>
+              </header>
+
+              <details class="learn">
+                <summary>¿Qué diferencia hay entre kW y kWh?</summary>
+                <p>Los <strong>kW</strong> miden potencia: qué tanto "jala" un equipo en un instante. Los <strong>kWh</strong> miden energía: esa potencia sostenida durante un tiempo. Un foco de 100 W encendido 10 horas consume 1 kWh, que es lo que cobra la CFE. La potencia decide el tamaño del inversor y el cableado; la energía decide cuántos paneles y baterías hacen falta y cuánto ahorras.</p>
+              </details>
+
+              <div class="tablewrap">
+                <table class="loads">
+                  <caption class="sr">Equipos del aula</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Equipo</th>
+                      <th scope="col" class="num">Cant.</th>
+                      <th scope="col" class="num">W c/u</th>
+                      <th scope="col" class="num">h/día</th>
+                      <th scope="col" class="num">Potencia</th>
+                      <th scope="col" class="num">Energía</th>
+                      <th scope="col" class="num">Corriente</th>
+                      <th scope="col"><span class="sr">Quitar</span></th>
+                    </tr>
+                  </thead>
+                  <tbody id="loadsBody"></tbody>
+                  <tfoot>
+                    <tr>
+                      <th scope="row" colspan="4">Total</th>
+                      <td class="num" id="totP">0 W</td>
+                      <td class="num" id="totE">0 Wh</td>
+                      <td class="num" id="totI">0 A</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <p class="note">Los equipos precargados son <strong>valores de ejemplo</strong>. Sustitúyelos por la potencia de placa o por una medición del aula real.</p>
+              <div class="row-actions">
+                <button class="btn btn--sm btn--primary" type="button" id="addLoad">Agregar equipo</button>
+                <button class="btn btn--sm btn--ghost" type="button" id="loadExample">Cargar aula de ejemplo</button>
+                <button class="btn btn--sm btn--ghost" type="button" id="clearLoads">Vaciar tabla</button>
+              </div>
+
+              <div class="fields">
+                <label class="field" for="f-days"><span class="field__label">Días de uso al año</span>
+                  <input id="f-days" type="number" inputmode="decimal" step="any" min="0" max="366" data-bind="params.daysPerYear">
+                  <span class="field__hint">Ejemplo editable: ciclo escolar.</span></label>
+                <label class="field" for="f-fs"><span class="field__label">Factor de simultaneidad</span>
+                  <input id="f-fs" type="number" inputmode="decimal" step="0.05" min="0" max="1" data-bind="params.simultaneity">
+                  <span class="field__hint">1 = todo encendido a la vez.</span></label>
+                <label class="field" for="f-v"><span class="field__label">Tensión de la instalación (V)</span>
+                  <input id="f-v" type="number" inputmode="decimal" step="any" min="1" data-bind="params.acVolts">
+                  <span class="field__hint">Para estimar corriente: I = P / V.</span></label>
+              </div>
+
+              <div class="tiles" id="consumoTiles" aria-live="polite"></div>
+              <div class="bars" id="consumoBars"></div>
+
+              <footer class="view__nav">
+                <button class="btn btn--ghost" type="button" data-go="curva">Anterior</button>
+                <button class="btn btn--primary" type="button" data-go="paneles">Siguiente: paneles</button>
+              </footer>
+            </section>
+
+            <!-- ===== 2. PANELES ===== -->
+            <section class="view" data-view="paneles" aria-labelledby="t-paneles" hidden>
+              <header class="view__head">
+                <h2 id="t-paneles" class="h3">¿Cuántos paneles necesitas y cómo se conectan?</h2>
+                <p class="lead">La energía diaria del aula, las horas solar pico del sitio y las pérdidas del sistema definen la potencia fotovoltaica. Después se decide cuántos paneles van en serie y cuántas cadenas en paralelo.</p>
+              </header>
+
+              <fieldset class="modeseg" id="modeSeg">
+                <legend>Tipo de sistema</legend>
+                <label class="modeseg__opt"><input type="radio" name="mode" value="grid"><span><strong>Interconectado</strong><small>Sin baterías. Usa la red como respaldo.</small></span></label>
+                <label class="modeseg__opt"><input type="radio" name="mode" value="battery"><span><strong>Con baterías (48 V)</strong><small>Almacena energía para nubes o apagones.</small></span></label>
+              </fieldset>
+
+              <div class="fields">
+                <label class="field" for="f-hsp"><span class="field__label">Horas solar pico (HSP)</span>
+                  <input id="f-hsp" type="number" inputmode="decimal" step="0.1" min="0.5" max="9" data-bind="site.hsp">
+                  <span class="field__hint">kWh/m²/día. Valor de ejemplo: consulta tu fuente para el sitio.</span></label>
+                <label class="field" for="f-pr"><span class="field__label">Rendimiento del sistema (PR)</span>
+                  <input id="f-pr" type="number" inputmode="decimal" step="0.01" min="0.4" max="1" data-bind="site.pr">
+                  <span class="field__hint">Pérdidas por calor, polvo, cableado e inversor.</span></label>
+                <label class="field" for="f-tmin"><span class="field__label">Temperatura mínima (°C)</span>
+                  <input id="f-tmin" type="number" inputmode="decimal" step="1" data-bind="site.tMin">
+                  <span class="field__hint">En frío el voltaje de los paneles sube.</span></label>
+                <label class="field" for="f-tmax"><span class="field__label">Temperatura de celda máxima (°C)</span>
+                  <input id="f-tmax" type="number" inputmode="decimal" step="1" data-bind="site.tCellMax">
+                  <span class="field__hint">En calor el voltaje de los paneles baja.</span></label>
+              </div>
+
+              <h3 class="h4">Elige el panel</h3>
+              <div class="products" id="panelList" role="radiogroup" aria-label="Paneles disponibles"></div>
+
+              <div class="tiles" id="panelTiles" aria-live="polite"></div>
+
+              <div class="fields fields--inline">
+                <label class="field" for="f-npan"><span class="field__label">Paneles a instalar</span>
+                  <input id="f-npan" type="number" inputmode="numeric" step="1" min="1" max="60">
+                  <span class="field__hint" id="npanHint">Sugerido según el consumo.</span></label>
+                <label class="field" for="f-ns"><span class="field__label">Paneles en serie por cadena</span>
+                  <select id="f-ns"></select>
+                  <span class="field__hint">Se limita por el inversor elegido.</span></label>
+                <label class="field" for="f-len"><span class="field__label">Cable de cada cadena (m, un sentido)</span>
+                  <input id="f-len" type="number" inputmode="decimal" step="1" min="0" data-bind="cable.lengthM">
+                  <span class="field__hint">Para la caída de tensión (ley de Ohm).</span></label>
+                <label class="field" for="f-sec"><span class="field__label">Sección del cable (mm²)</span>
+                  <input id="f-sec" type="number" inputmode="decimal" step="any" min="0.5" data-bind="cable.sectionMm2">
+                  <span class="field__hint">Cobre. Se calcula a 70 °C.</span></label>
+              </div>
+
+              <figure class="diagram-card">
+                <div id="arrayDiagram" role="img" aria-label="Esquema de paneles en serie y cadenas en paralelo"></div>
+                <figcaption id="arrayCaption"></figcaption>
+              </figure>
+
+              <footer class="view__nav">
+                <button class="btn btn--ghost" type="button" data-go="consumo">Anterior</button>
+                <button class="btn btn--primary" type="button" data-go="inversor">Siguiente: inversor</button>
+              </footer>
+            </section>
+
+            <!-- ===== 3. INVERSOR ===== -->
+            <section class="view" data-view="inversor" aria-labelledby="t-inversor" hidden>
+              <header class="view__head">
+                <h2 id="t-inversor" class="h3">¿Es compatible el inversor?</h2>
+                <p class="lead">Un inversor real tiene límites de voltaje, corriente y potencia. Cada prueba compara tu arreglo de paneles contra esos límites con los datos de la ficha técnica.</p>
+              </header>
+              <div class="products" id="inverterList" role="radiogroup" aria-label="Inversores disponibles"></div>
+              <h3 class="h4">Pruebas de compatibilidad</h3>
+              <ul class="checks" id="arrayChecks"></ul>
+              <footer class="view__nav">
+                <button class="btn btn--ghost" type="button" data-go="paneles">Anterior</button>
+                <button class="btn btn--primary" type="button" data-go="baterias">Siguiente: baterías</button>
+              </footer>
+            </section>
+
+            <!-- ===== 4. BATERÍAS ===== -->
+            <section class="view" data-view="baterias" aria-labelledby="t-baterias" hidden>
+              <header class="view__head">
+                <h2 id="t-baterias" class="h3">¿Cuánta autonomía necesitas?</h2>
+                <p class="lead">Las baterías guardan energía para cuando no hay sol. Se dimensionan por la energía que quieres respaldar y se comprueba que aguanten la corriente que pide el aula.</p>
+              </header>
+              <div id="batOff" class="empty" hidden>
+                <h3 class="h4">Este sistema es interconectado y no usa baterías</h3>
+                <p>La red hace de respaldo. Si necesitas funcionar sin red, cambia el tipo de sistema a "Con baterías".</p>
+                <button class="btn btn--sm btn--sun" type="button" id="goBatteryMode">Cambiar a sistema con baterías</button>
+              </div>
+              <div id="batOn">
+                <div class="fields">
+                  <label class="field" for="f-days-aut"><span class="field__label">Días de autonomía</span>
+                    <input id="f-days-aut" type="number" inputmode="decimal" step="0.1" min="0.1" max="5" data-bind="battery.days">
+                    <span class="field__hint">0.5 = media jornada de consumo.</span></label>
+                  <label class="field" for="f-eta-inv"><span class="field__label">Eficiencia del inversor</span>
+                    <input id="f-eta-inv" type="number" inputmode="decimal" step="0.01" min="0.5" max="1" data-bind="battery.etaInv">
+                    <span class="field__hint">Supuesto editable.</span></label>
+                  <label class="field" for="f-eta-rt"><span class="field__label">Eficiencia ida y vuelta de la batería</span>
+                    <input id="f-eta-rt" type="number" inputmode="decimal" step="0.01" min="0.5" max="1" data-bind="battery.etaRT">
+                    <span class="field__hint">Se aplica a la energía generada.</span></label>
+                </div>
+                <div class="products" id="batteryList" role="radiogroup" aria-label="Baterías disponibles"></div>
+                <div class="tiles" id="batTiles" aria-live="polite"></div>
+                <h3 class="h4">Pruebas del banco de baterías</h3>
+                <ul class="checks" id="batChecks"></ul>
+                <div class="limits">
+                  <h3 class="h4">Supuestos y límites de este cálculo</h3>
+                  <ul>
+                    <li>Se respalda la energía de un día de uso multiplicada por los días de autonomía; no se simula hora por hora.</li>
+                    <li>La profundidad de descarga es la utilizable que declara la ficha. La capacidad cae con el frío y con el desgaste.</li>
+                    <li>La autonomía en horas supone toda la demanda simultánea encendida a la vez: es un valor conservador.</li>
+                    <li>No se incluyen pérdidas de cableado entre baterías ni el costo de reemplazarlas durante la vida del sistema.</li>
+                  </ul>
+                </div>
+              </div>
+              <footer class="view__nav">
+                <button class="btn btn--ghost" type="button" data-go="inversor">Anterior</button>
+                <button class="btn btn--primary" type="button" data-go="economia">Siguiente: economía</button>
+              </footer>
+            </section>
+
+            <!-- ===== 5. ECONOMÍA ===== -->
+            <section class="view" data-view="economia" aria-labelledby="t-economia" hidden>
+              <header class="view__head">
+                <h2 id="t-economia" class="h3">¿Cuánto cuesta y en cuánto tiempo se recupera?</h2>
+                <p class="lead">Escribe lo que pagas por electricidad. El simulador calcula la inversión con los precios del catálogo, el ahorro de cada año y el momento en que lo ahorrado alcanza lo invertido.</p>
+              </header>
+              <div class="fields">
+                <label class="field field--key" for="f-tariff"><span class="field__label">Costo de la electricidad (MXN/kWh)</span>
+                  <input id="f-tariff" type="number" inputmode="decimal" step="0.01" min="0" data-bind="econ.tariff">
+                  <span class="field__hint">Valor de ejemplo. Usa el de tu recibo.</span></label>
+                <label class="field" for="f-install"><span class="field__label">Instalación y accesorios (% del equipo)</span>
+                  <input id="f-install" type="number" inputmode="decimal" step="1" min="0" data-bind="econ.installPct">
+                  <span class="field__hint">Estructura, cable, protecciones y mano de obra. Supuesto editable.</span></label>
+                <label class="field" for="f-iva"><span class="field__label">IVA a agregar (%)</span>
+                  <input id="f-iva" type="number" inputmode="decimal" step="1" min="0" data-bind="econ.ivaPct">
+                  <span class="field__hint">Pon 16 si los precios del catálogo no lo incluyen.</span></label>
+                <label class="field" for="f-degr"><span class="field__label">Pérdida anual de producción (%)</span>
+                  <input id="f-degr" type="number" inputmode="decimal" step="0.1" min="0" max="5" data-bind="econ.degradPct">
+                  <span class="field__hint">Envejecimiento de los paneles.</span></label>
+                <label class="field" for="f-esc"><span class="field__label">Aumento anual de la tarifa (%)</span>
+                  <input id="f-esc" type="number" inputmode="decimal" step="0.5" data-bind="econ.escalationPct">
+                  <span class="field__hint">0 = tarifa constante (más prudente).</span></label>
+                <label class="field" for="f-om"><span class="field__label">Mantenimiento anual (MXN)</span>
+                  <input id="f-om" type="number" inputmode="decimal" step="1" min="0" data-bind="econ.omYear">
+                  <span class="field__hint">Limpieza y revisiones.</span></label>
+              </div>
+              <label class="check" for="f-net"><input id="f-net" type="checkbox" data-bind="econ.netMetering"><span><strong>Valorar excedentes con medición neta</strong><small>Si está apagado, solo se ahorra la energía que el aula consume el mismo día. Es la lectura más prudente.</small></span></label>
+
+              <div class="tiles tiles--big" id="econTiles" aria-live="polite"></div>
+              <div class="tablewrap"><table class="costs" id="costTable"></table></div>
+              <figure class="chart-card">
+                <figcaption class="h4">Dinero acumulado en 25 años</figcaption>
+                <div id="cashChart" role="img" aria-label="Gráfica del flujo de dinero acumulado"></div>
+              </figure>
+              <footer class="view__nav">
+                <button class="btn btn--ghost" type="button" data-go="baterias">Anterior</button>
+                <button class="btn btn--primary" type="button" data-go="reporte">Siguiente: reporte</button>
+              </footer>
+            </section>
+
+            <!-- ===== 6. REPORTE ===== -->
+            <section class="view" data-view="reporte" aria-labelledby="t-reporte" hidden>
+              <header class="view__head">
+                <h2 id="t-reporte" class="h3">Propuesta lista para entregar</h2>
+                <p class="lead">Completa los datos del proyecto y descarga el reporte. En el diálogo de impresión elige "Guardar como PDF".</p>
+              </header>
+              <div class="fields">
+                <label class="field" for="f-pname"><span class="field__label">Proyecto</span>
+                  <input id="f-pname" type="text" data-bind="project.name" autocomplete="off"></label>
+                <label class="field" for="f-pclient"><span class="field__label">Cliente</span>
+                  <input id="f-pclient" type="text" data-bind="project.client" autocomplete="off"></label>
+                <label class="field" for="f-pplace"><span class="field__label">Ubicación</span>
+                  <input id="f-pplace" type="text" data-bind="project.place" autocomplete="off"></label>
+                <label class="field" for="f-pcompany"><span class="field__label">Empresa que presenta</span>
+                  <input id="f-pcompany" type="text" data-bind="project.company" autocomplete="off"></label>
+                <label class="field" for="f-pauthor"><span class="field__label">Elaboró</span>
+                  <input id="f-pauthor" type="text" data-bind="project.author" autocomplete="off"></label>
+              </div>
+              <div class="row-actions">
+                <button class="btn btn--lg btn--sun" type="button" id="printBtn">Descargar PDF</button>
+                <span class="note" id="printNote"></span>
+              </div>
+              <div class="paper-wrap"><article class="paper" id="report" aria-label="Vista previa del reporte"></article></div>
+              <footer class="view__nav">
+                <button class="btn btn--ghost" type="button" data-go="economia">Anterior</button>
+                <span></span>
+              </footer>
+            </section>
+
+            <!-- ===== CATÁLOGO ===== -->
+            <section class="view" data-view="catalogo" aria-labelledby="t-catalogo" hidden>
+              <header class="view__head">
+                <h2 id="t-catalogo" class="h3">Catálogo comercial</h2>
+                <p class="lead">Productos reales con su ficha técnica, precio, proveedor, enlace y fecha de consulta. Los precios cambian: vuelve a consultarlos antes de cotizar. Tus cambios se guardan en este navegador.</p>
+              </header>
+              <div class="cat-tools">
+                <div class="cat-filter" role="group" aria-label="Filtrar por categoría">
+                  <button class="btn btn--sm btn--line-dark" type="button" data-cat="all" aria-pressed="true">Todo</button>
+                  <button class="btn btn--sm btn--line-dark" type="button" data-cat="panel" aria-pressed="false">Paneles</button>
+                  <button class="btn btn--sm btn--line-dark" type="button" data-cat="inversor" aria-pressed="false">Inversores</button>
+                  <button class="btn btn--sm btn--line-dark" type="button" data-cat="bateria" aria-pressed="false">Baterías</button>
+                </div>
+                <div class="cat-actions">
+                  <button class="btn btn--sm btn--primary" type="button" id="catAdd">Agregar producto</button>
+                  <button class="btn btn--sm btn--ghost" type="button" id="catExport">Exportar JSON</button>
+                  <button class="btn btn--sm btn--ghost" type="button" id="catImportBtn">Importar JSON</button>
+                  <button class="btn btn--sm btn--ghost" type="button" id="catReset">Restablecer base</button>
+                  <input type="file" id="catImport" accept="application/json,.json" hidden>
+                </div>
+              </div>
+              <p class="note" id="catMsg" role="status"></p>
+              <div class="catalog" id="catalogList"></div>
+            </section>
+          </div>
+
+          <!-- ===== RESUMEN EN VIVO ===== -->
+          <aside class="sim__side" aria-label="Resumen en vivo">
+            <div class="live" id="live"></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <div class="footer__brand">
+        <img src="assets/logo-horizontal.png" alt="SVOLTS Ingeniería Solar" width="176" height="50">
+        <p>Transformamos la luz solar en energía inteligente.</p>
+      </div>
+      <nav aria-label="Pie de página">
+        <ul class="footer__nav">
+          <li><a href="index.html#servicios">Servicios</a></li>
+          <li><a href="index.html#ingenieria">Ingeniería</a></li>
+          <li><a href="simulador.html">Simulador</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="wrap footer__author">
+      <div class="author" aria-label="Autoría del proyecto">
+        <span class="author__tag">Proyecto académico</span>
+        <dl class="author__list">
+          <div><dt>Autor</dt><dd>Rodrigo Espada</dd></div>
+          <div><dt>Institución</dt><dd>Tecnológico de Monterrey</dd></div>
+          <div><dt>Carrera</dt><dd>Ingeniería Industrial</dd></div>
+          <div><dt>Matrícula</dt><dd>A01742679</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="wrap footer__legal">
+      <p>© 2026 SVOLTS · Ingeniería Solar. El simulador entrega un dimensionamiento y una cotización preliminares; no es un proyecto ejecutivo autorizado para construcción.</p>
+    </div>
+  </footer>
+
+  <!-- ===== Diálogo: agregar / editar producto ===== -->
+  <dialog class="pdialog" id="prodDialog" aria-labelledby="pd-title">
+    <form method="dialog" id="prodForm" novalidate>
+      <header class="pdialog__head">
+        <h2 id="pd-title" class="h4">Agregar producto</h2>
+        <button class="icon-btn pdialog__x" type="button" id="pdClose" aria-label="Cerrar">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </header>
+      <div class="pdialog__body">
+        <div class="fields">
+          <label class="field" for="pd-cat"><span class="field__label">Categoría</span>
+            <select id="pd-cat" name="cat"><option value="panel">Panel solar</option><option value="inversor">Inversor</option><option value="bateria">Batería</option></select></label>
+          <label class="field" for="pd-brand"><span class="field__label">Marca</span><input id="pd-brand" name="brand" type="text" required></label>
+          <label class="field" for="pd-model"><span class="field__label">Modelo</span><input id="pd-model" name="model" type="text" required></label>
+          <label class="field" for="pd-price"><span class="field__label">Precio (MXN)</span><input id="pd-price" name="price" type="number" step="any" min="0" required></label>
+          <label class="field" for="pd-supplier"><span class="field__label">Proveedor</span><input id="pd-supplier" name="supplier" type="text" required></label>
+          <label class="field" for="pd-date"><span class="field__label">Fecha de consulta</span><input id="pd-date" name="consulted" type="date" required></label>
+          <label class="field field--wide" for="pd-url"><span class="field__label">Enlace del producto</span><input id="pd-url" name="url" type="url" placeholder="https://" required></label>
+          <label class="field field--wide" for="pd-specs"><span class="field__label">Enlace de la ficha técnica</span><input id="pd-specs" name="specsUrl" type="url" placeholder="https://"></label>
+        </div>
+        <div class="fields" id="pd-specs-panel" data-for="panel">
+          <label class="field" for="pd-pmax"><span class="field__label">Potencia (W)</span><input id="pd-pmax" name="pmax" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-voc"><span class="field__label">Voc (V)</span><input id="pd-voc" name="voc" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-isc"><span class="field__label">Isc (A)</span><input id="pd-isc" name="isc" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-vmp"><span class="field__label">Vmp (V)</span><input id="pd-vmp" name="vmp" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-imp"><span class="field__label">Imp (A)</span><input id="pd-imp" name="imp" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-tcvoc"><span class="field__label">Coef. de Voc (%/°C)</span><input id="pd-tcvoc" name="tcVoc" type="number" step="any"></label>
+        </div>
+        <div class="fields" id="pd-specs-inversor" data-for="inversor" hidden>
+          <label class="field" for="pd-type"><span class="field__label">Tipo</span>
+            <select id="pd-type" name="type"><option value="interconectado">Interconectado (sin baterías)</option><option value="aislado48">Con baterías de 48 V</option></select></label>
+          <label class="field" for="pd-pac"><span class="field__label">Potencia CA (W)</span><input id="pd-pac" name="pacW" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-vdc"><span class="field__label">Voltaje CD máximo (V)</span><input id="pd-vdc" name="vdcMax" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-mmin"><span class="field__label">MPPT mínimo (V)</span><input id="pd-mmin" name="mpptMin" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-mmax"><span class="field__label">MPPT máximo (V)</span><input id="pd-mmax" name="mpptMax" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-nm"><span class="field__label">Número de MPPT</span><input id="pd-nm" name="nMppt" type="number" step="1" min="1"></label>
+          <label class="field" for="pd-spm"><span class="field__label">Cadenas por MPPT</span><input id="pd-spm" name="stringsPerMppt" type="number" step="1" min="1"></label>
+          <label class="field" for="pd-impmax"><span class="field__label">Corriente máx. por MPPT (A)</span><input id="pd-impmax" name="impMax" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-iscmax"><span class="field__label">Cortocircuito máx. por MPPT (A)</span><input id="pd-iscmax" name="iscMax" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-pdcmax"><span class="field__label">Potencia FV máxima (W)</span><input id="pd-pdcmax" name="pdcMax" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-vbat"><span class="field__label">Voltaje de batería (V)</span><input id="pd-vbat" name="vbat" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-ichg"><span class="field__label">Carga solar máx. (A)</span><input id="pd-ichg" name="iChargePvMax" type="number" step="any" min="0"></label>
+        </div>
+        <div class="fields" id="pd-specs-bateria" data-for="bateria" hidden>
+          <label class="field" for="pd-vnom"><span class="field__label">Voltaje nominal (V)</span><input id="pd-vnom" name="vnom" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-kwh"><span class="field__label">Energía nominal (kWh)</span><input id="pd-kwh" name="kwh" type="number" step="any" min="0"></label>
+          <label class="field" for="pd-dod"><span class="field__label">Profundidad de descarga (%)</span><input id="pd-dod" name="dodPct" type="number" step="any" min="1" max="100"></label>
+          <label class="field" for="pd-irec"><span class="field__label">Corriente recomendada (A)</span><input id="pd-irec" name="irec" type="number" step="any" min="0"></label>
+        </div>
+        <label class="field field--wide" for="pd-notes"><span class="field__label">Notas</span><textarea id="pd-notes" name="notes" rows="3"></textarea></label>
+        <p class="form-error" id="pd-error" role="alert" hidden></p>
+      </div>
+      <footer class="pdialog__foot">
+        <button class="btn btn--ghost" type="button" id="pdCancel">Cancelar</button>
+        <button class="btn btn--primary" type="submit" id="pdSave">Guardar producto</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <script src="catalogo.js"></script>
+  <script src="calc.js"></script>
+  <script src="simulador.js" defer></script>
+</body>
+</html>
