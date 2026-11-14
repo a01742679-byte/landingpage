@@ -381,6 +381,9 @@ table { border-collapse: collapse; width: 100%; }
 .sim__grid.is-basic .sim__main { max-width: 1040px; }
 .sim__top:has(.stepper[hidden]) { justify-content: flex-start; }
 
+/* Mensajes de validación */
+.ctl-err { font-size: .9rem; font-weight: 700; color: #B3261E; background: #FBE4E1; border-radius: 14px; padding: 10px 14px; }
+
 /* Opciones tipo píldora */
 .field--radio { border: 0; padding: 0; margin: 0; }
 .field--radio legend { padding: 0; margin-bottom: 6px; }
@@ -493,3 +496,5 @@ input[type="range"]:focus-visible { outline: 3px solid var(--ring); outline-offs
   .rp-kpis div, .rp-info div, .rp-table thead th, .rp-table tfoot th, .rp-table tfoot td, .rp-gloss, .spill, .c-pos, .c-neg, .d-panel, .d-inv { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .rp-table a { color: #1B5A93; }
 }
+.vi-checks { display: grid; gap: 12px; }
+.vi-checks__src { font-family: var(--font-body); font-weight: 600; font-size: .85rem; color: var(--blue-deep); }

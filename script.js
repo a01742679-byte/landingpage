@@ -734,17 +734,4 @@
     }
   }
 
-  /* ------------------------------------------------------------------------
-     Botones "Simulador de Celdas Solares": transición breve antes de abrir
-     el simulador (se omite si el usuario prefiere menos movimiento).
-     ------------------------------------------------------------------------ */
-  document.addEventListener('click', (e) => {
-    const a = e.target.closest('a[data-sim-link]');
-    if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    e.preventDefault();
-    document.body.classList.add('page-leave');
-    window.setTimeout(() => { window.location.href = a.href; }, 200);
-  });
-  window.addEventListener('pageshow', () => document.body.classList.remove('page-leave'));
 })();
