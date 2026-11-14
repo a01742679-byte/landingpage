@@ -12,7 +12,8 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="simulador.css">
   <link rel="stylesheet" href="laboratorio.css">
-  <script>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="fx.css">
+  <script>(function(d){d.classList.add('js');try{var n=JSON.parse(sessionStorage.getItem('svfx-nav')||'null');sessionStorage.removeItem('svfx-nav');if(n&&Date.now()-n.t<5000&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&localStorage.getItem('svfx-paused')!=='1'){d.classList.add('fx-arrive');d.style.setProperty('--fx-x',(n.x*100).toFixed(1)+'%');d.style.setProperty('--fx-y',(n.y*100).toFixed(1)+'%');}}catch(e){}})(document.documentElement);</script>
 </head>
 <body class="lab-page">
   <a class="skip" href="#lab">Saltar al laboratorio</a>
@@ -41,6 +42,7 @@
   <main id="lab">
     <!-- ================= PORTADA DEL LABORATORIO ================= -->
     <section class="labhero" aria-labelledby="lab-title">
+      <canvas class="labhero__aurora" data-fx="aurora" aria-hidden="true"></canvas>
       <canvas class="labhero__field" id="heroField" aria-hidden="true"></canvas>
       <div class="wrap labhero__inner">
         <p class="chip chip--sun"><span class="chip__dot"></span>Versión 3 · física calculada en tu navegador</p>
@@ -61,6 +63,7 @@
           </a>
         </nav>
       </div>
+      <button class="fx-toggle" type="button" data-fx-toggle aria-pressed="false"><span class="fx-toggle__i" aria-hidden="true"></span><span class="fx-toggle__t">Pausar animaciones</span></button>
     </section>
 
     <div class="labbody">
@@ -237,7 +240,7 @@
             </aside>
           </div>
 
-          <div class="readouts" id="peReadouts" aria-live="polite"></div>
+          <div class="readouts" id="peReadouts" aria-live="polite" data-fx-live></div>
 
           <div class="pe__charts">
             <figure class="minichart">
@@ -313,7 +316,7 @@
             </aside>
           </div>
 
-          <div class="readouts" id="pnReadouts" aria-live="polite"></div>
+          <div class="readouts" id="pnReadouts" aria-live="polite" data-fx-live></div>
 
           <div class="pnsteps">
             <ol>
@@ -401,5 +404,6 @@
   <script src="lab-espectro.js"></script>
   <script src="lab-fotoelectrico.js"></script>
   <script src="lab-celda.js"></script>
+  <script src="fx.js" defer></script>
 </body>
 </html>

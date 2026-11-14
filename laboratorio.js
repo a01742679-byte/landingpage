@@ -222,8 +222,12 @@
     const loop = createLoop(draw);
     draw(0);
     loop.setVisible(true);
-    if (!reduce.matches) loop.play();
-    reduce.addEventListener('change', () => { if (reduce.matches) loop.pause(); else loop.play(); });
+    let fxPaused = false;
+    try { fxPaused = localStorage.getItem('svfx-paused') === '1'; } catch (e) { /* sin almacenamiento */ }
+    const sync = () => { if (reduce.matches || fxPaused) loop.pause(); else loop.play(); };
+    sync();
+    reduce.addEventListener('change', sync);
+    document.addEventListener('svfx:pause', (e) => { fxPaused = !!(e.detail && e.detail.paused); sync(); });
     if ('IntersectionObserver' in window) new IntersectionObserver((es) => loop.setVisible(es[0].isIntersecting)).observe(cv);
   })();
 

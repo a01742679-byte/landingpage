@@ -9,7 +9,8 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="simulador.css">
-  <script>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="fx.css">
+  <script>(function(d){d.classList.add('js');try{var n=JSON.parse(sessionStorage.getItem('svfx-nav')||'null');sessionStorage.removeItem('svfx-nav');if(n&&Date.now()-n.t<5000&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&localStorage.getItem('svfx-paused')!=='1'){d.classList.add('fx-arrive');d.style.setProperty('--fx-x',(n.x*100).toFixed(1)+'%');d.style.setProperty('--fx-y',(n.y*100).toFixed(1)+'%');}}catch(e){}})(document.documentElement);</script>
 </head>
 <body class="sim-page">
   <a class="skip" href="#app">Saltar al simulador</a>
@@ -38,6 +39,7 @@
   <main>
     <!-- ================= PORTADA ================= -->
     <section class="simhero" aria-labelledby="sim-title">
+      <canvas class="simhero__gl" data-fx="sol-sim" aria-hidden="true"></canvas>
       <svg class="simhero__sun" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
         <circle cx="200" cy="200" r="190" fill="#F5A623" opacity=".14"/>
         <circle cx="200" cy="200" r="130" fill="#F5A623" opacity=".2"/>
@@ -53,6 +55,7 @@
         </div>
         <p class="simhero__author">Desarrollado por <strong>Rodrigo Espada</strong> · Ingeniería Industrial · Tec de Monterrey</p>
       </div>
+      <button class="fx-toggle" type="button" data-fx-toggle aria-pressed="false"><span class="fx-toggle__i" aria-hidden="true"></span><span class="fx-toggle__t">Pausar animaciones</span></button>
     </section>
 
     <!-- ================= APLICACIÓN ================= -->
@@ -124,7 +127,7 @@
               </div>
 
               <p class="ctl-err" id="basicErr" role="alert" hidden></p>
-              <div class="tiles tiles--big" id="basicTiles" aria-live="polite"></div>
+              <div class="tiles tiles--big" id="basicTiles" aria-live="polite" data-fx-live></div>
 
               <div class="bcompare" id="basicCompare"></div>
 
@@ -163,7 +166,7 @@
                 </figcaption>
               </figure>
 
-              <div class="tiles" id="viTiles" aria-live="polite"></div>
+              <div class="tiles" id="viTiles" aria-live="polite" data-fx-live></div>
               <p class="vi-note" id="viNote"></p>
 
               <div class="vi-checks">
@@ -511,7 +514,7 @@
 
           <!-- ===== RESUMEN EN VIVO ===== -->
           <aside class="sim__side" aria-label="Resumen en vivo">
-            <div class="live" id="live"></div>
+            <div class="live" id="live" data-fx-live></div>
           </aside>
         </div>
       </div>
@@ -613,5 +616,6 @@
   <script src="catalogo.js"></script>
   <script src="calc.js"></script>
   <script src="simulador.js" defer></script>
+  <script src="fx.js" defer></script>
 </body>
 </html>
