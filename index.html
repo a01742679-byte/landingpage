@@ -10,7 +10,8 @@
   <link rel="preload" href="assets/fonts/space-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
-  <script>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="fx.css">
+  <script>(function(d){d.classList.add('js');try{var n=JSON.parse(sessionStorage.getItem('svfx-nav')||'null');sessionStorage.removeItem('svfx-nav');if(n&&Date.now()-n.t<5000&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&localStorage.getItem('svfx-paused')!=='1'){d.classList.add('fx-arrive');d.style.setProperty('--fx-x',(n.x*100).toFixed(1)+'%');d.style.setProperty('--fx-y',(n.y*100).toFixed(1)+'%');}}catch(e){}})(document.documentElement);</script>
 </head>
 <body>
   <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -42,6 +43,7 @@
 
     <!-- ============ 01 · HERO ============ -->
     <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <canvas class="hero__gl" data-fx="sol-hero" aria-hidden="true"></canvas>
       <div class="hero__grid-bg" aria-hidden="true"></div>
       <div class="wrap hero__inner">
         <div class="hero__copy">
@@ -110,6 +112,94 @@
       <svg class="hero__hills" viewBox="0 0 1440 120" preserveAspectRatio="none" focusable="false" aria-hidden="true">
         <path d="M0 120V70C140 20 260 18 400 58s260 54 420 6 300-48 420 8c80 36 160 34 200 6v62z"/>
       </svg>
+      <button class="fx-toggle" type="button" data-fx-toggle aria-pressed="false"><span class="fx-toggle__i" aria-hidden="true"></span><span class="fx-toggle__t">Pausar animaciones</span></button>
+      <a class="hero__cue" href="#viaje"><span>Sigue al fotón</span><i aria-hidden="true"></i></a>
+    </section>
+
+    <!-- ============ 01b · EL VIAJE DE UN FOTÓN ============ -->
+    <section class="journey" id="viaje" aria-labelledby="journey-title">
+      <div class="journey__track">
+        <div class="journey__stage">
+          <canvas class="journey__gl" aria-hidden="true"></canvas>
+          <canvas class="journey__cv" aria-hidden="true"></canvas>
+          <div class="journey__hud">
+            <header class="journey__head">
+              <p class="eyebrow">El viaje de un fotón</p>
+              <h2 id="journey-title" class="journey__title">Del núcleo del Sol a un enchufe de tu casa, en cinco escenas.</h2>
+            </header>
+            <ol class="jchs">
+              <li class="jch" data-ch="0">
+                <div class="jch__card">
+                  <p class="jch__k">01 · Origen</p>
+                  <h3>Nace en el Sol</h3>
+                  <p>En el núcleo, la fusión nuclear convierte hidrógeno en helio. La energía tarda decenas de miles de años en abrirse paso hasta la superficie, chocando una y otra vez (las estimaciones varían mucho), y de ahí sale como luz.</p>
+                  <dl class="jch__stats">
+                    <div><dt>Temperatura de la superficie</dt><dd>5,772 K</dd></div>
+                    <div><dt>Potencia que emite el Sol</dt><dd>3.83 × 10²⁶ W</dd></div>
+                  </dl>
+                </div>
+              </li>
+              <li class="jch" data-ch="1">
+                <div class="jch__card">
+                  <p class="jch__k">02 · Trayecto</p>
+                  <h3>8 minutos y 19 segundos</h3>
+                  <p>Ya en el espacio, el fotón viaja en línea recta a 299,792 km/s y cruza la distancia media entre el Sol y la Tierra sin perder energía.</p>
+                  <dl class="jch__stats">
+                    <div><dt>Distancia recorrida (km)</dt><dd data-j="km">149,597,871</dd></div>
+                    <div><dt>Tiempo de viaje</dt><dd data-j="t">8 min 19 s</dd></div>
+                  </dl>
+                </div>
+              </li>
+              <li class="jch" data-ch="2">
+                <div class="jch__card">
+                  <p class="jch__k">03 · Atmósfera</p>
+                  <h3>Cruza el cielo</h3>
+                  <p>Fuera de la atmósfera llegan unos 1,361 W por metro cuadrado. El ozono absorbe casi todo el ultravioleta más energético, el vapor de agua y el CO₂ parte del infrarrojo, y el aire dispersa el azul: por eso el cielo es azul.</p>
+                  <dl class="jch__stats">
+                    <div><dt>Fuera de la atmósfera</dt><dd>1,361 W/m²</dd></div>
+                    <div><dt>En el suelo, día despejado</dt><dd><span data-j="irr">≈ 1,000 W/m²</span><small>AM1.5 · norma ASTM G173</small></dd></div>
+                  </dl>
+                </div>
+              </li>
+              <li class="jch" data-ch="3">
+                <div class="jch__card">
+                  <p class="jch__k">04 · Celda solar</p>
+                  <h3>Libera un electrón</h3>
+                  <p>Un fotón verde de 550 nm lleva 2.25 eV. En una celda de silicio supera la banda prohibida de 1.12 eV y libera un electrón; el campo de la unión p-n lo empuja hacia el circuito. Los 1.13 eV restantes se vuelven calor.</p>
+                  <dl class="jch__stats">
+                    <div><dt>Energía del fotón</dt><dd>2.25 eV</dd></div>
+                    <div><dt>Eficiencia del panel (620 W)</dt><dd>22.2 %<small>620 W ÷ 2.80 m² ÷ 1000 W/m²</small></dd></div>
+                  </dl>
+                </div>
+              </li>
+              <li class="jch" data-ch="4">
+                <div class="jch__card">
+                  <p class="jch__k">05 · Tu casa</p>
+                  <h3>Se vuelve electricidad útil</h3>
+                  <p>Millones de electrones forman una corriente directa. El inversor la convierte en corriente alterna a 60 Hz, la misma que entrega la red en México. Con 5.5 horas solares pico, un panel de 620 W produce unos 2.56 kWh al día.</p>
+                  <dl class="jch__stats">
+                    <div><dt>Frecuencia de la red</dt><dd>60 Hz</dd></div>
+                    <div><dt>Energía de un panel al día</dt><dd><span data-j="kwh">2.56 kWh</span><small>HSP 5.5 · PR 0.75, supuestos del simulador</small></dd></div>
+                  </dl>
+                  <div class="jch__cta">
+                    <a class="btn btn--sun" href="laboratorio.html#espectro">Ir al Laboratorio</a>
+                    <a class="btn btn--line" href="simulador.html">Calcular mi sistema</a>
+                  </div>
+                </div>
+              </li>
+            </ol>
+            <nav class="journey__rail" aria-label="Escenas del viaje">
+              <button class="journey__dot" type="button" aria-label="Escena 1: el Sol">1</button>
+              <button class="journey__dot" type="button" aria-label="Escena 2: el trayecto">2</button>
+              <button class="journey__dot" type="button" aria-label="Escena 3: la atmósfera">3</button>
+              <button class="journey__dot" type="button" aria-label="Escena 4: la celda solar">4</button>
+              <button class="journey__dot" type="button" aria-label="Escena 5: tu casa">5</button>
+            </nav>
+            <a class="journey__skip" href="#servicios">Saltar el recorrido</a>
+            <div class="journey__bar" aria-hidden="true"><i></i></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ============ 02 · SERVICIOS ============ -->
@@ -701,6 +791,7 @@
 
     <!-- ============ 07 · CONTACTO / CIERRE ============ -->
     <section class="section closing" id="contacto" aria-labelledby="closing-title">
+      <canvas class="closing__gl" data-fx="sol-amanecer" aria-hidden="true"></canvas>
       <svg class="closing__sun" viewBox="0 0 600 300" focusable="false" aria-hidden="true">
         <circle class="cs-3" cx="300" cy="300" r="290"/>
         <circle class="cs-2" cx="300" cy="300" r="210"/>
@@ -783,5 +874,7 @@
   </dialog>
 
   <script src="script.js" defer></script>
+  <script src="fx.js" defer></script>
+  <script src="journey.js" defer></script>
 </body>
 </html>
