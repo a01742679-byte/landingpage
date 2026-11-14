@@ -1,4 +1,4 @@
-# SVOLTS · Ingeniería Solar — Versión 3
+# SVOLTS · Ingeniería Solar — Versión 4
 
 Landing page corporativa y **Simulador de Celdas Solares** (HTML + CSS + JavaScript, sin dependencias ni backend).
 Estilo visual: formas planas y redondeadas (flat vector), color en bloques, profundidad 3D discreta y paleta de marca SVOLTS
@@ -6,6 +6,28 @@ Estilo visual: formas planas y redondeadas (flat vector), color en bloques, prof
 
 **Desarrollado por:** Rodrigo Espada · Ingeniería Industrial · Tecnológico de Monterrey · Matrícula: pendiente de proporcionar.
 Proyecto académico del estudiante; no es una publicación oficial ni cuenta con el respaldo de la institución.
+
+## Novedades de la versión 4 · Animaciones
+
+Todo el sitio (portada, simulador y laboratorio) comparte un motor de animación propio, sin dependencias:
+
+| Archivo | Qué hace |
+|---|---|
+| `fx.js` | Escenas **WebGL** dibujadas con un solo shader de fragmentos: un **Sol vivo** (plasma con ruido fractal, oscurecimiento hacia el borde, corona con serpentinas, estrellas, destellos de lente y una ignición al cargar) y una **aurora** con los colores del espectro visible. Calidad adaptable, pausa fuera de pantalla y respaldo sin WebGL. También: transición entre páginas (un sol se expande desde el clic y la página nueva se abre con un anillo de luz), luz que sigue al cursor en las tarjetas, botones magnéticos, titulares que se materializan palabra por palabra y valores que brillan al cambiar. |
+| `journey.js` | **El viaje de un fotón**: escena fijada al desplazamiento en la portada, en cinco capítulos (núcleo del Sol → 1 UA en 8 min 19 s → atmósfera → celda p-n → inversor y casa). Cifras verificables: 5772 K, 3.828 × 10²⁶ W, 149 597 871 km, 1361 W/m², ≈ 1000 W/m² (ASTM G173), 2.25 eV vs 1.12 eV, 22.2 % del panel de 620 W del catálogo, 60 Hz y 2.56 kWh/día por panel con los supuestos del simulador. |
+| `fx.css` | Estilos de todo lo anterior y el nuevo hero oscuro de la portada. |
+
+Dónde aparece: Sol vivo en el hero de la portada, en el encabezado del simulador y en el amanecer del cierre; aurora en el
+encabezado del laboratorio; transiciones entre las tres páginas; entradas animadas de los pasos del simulador y de las
+simulaciones del laboratorio.
+
+Accesibilidad y rendimiento:
+- Botón **Pausar animaciones** en cada encabezado (se recuerda entre páginas). Con `prefers-reduced-motion` no hay
+  transiciones ni movimiento y el viaje del fotón se muestra como tarjetas con ilustraciones estáticas.
+- Las escenas se detienen fuera de pantalla y en pestañas ocultas; si los cuadros tardan, baja la resolución sola.
+- Sin WebGL, la portada conserva el sol SVG original y el viaje usa un Sol dibujado en 2D.
+- El contenido nunca depende de JavaScript: sin JS el viaje se muestra como tarjetas y la llegada a una página no se
+  queda tapada (la animación de llegada es CSS puro).
 
 ## Novedades de la versión 3 · Laboratorio Solar Interactivo
 
@@ -33,6 +55,7 @@ lab-core.js                                         ← motor de física (funcio
 lab-espectro.js  lab-fotoelectrico.js  lab-celda.js ← las tres simulaciones
 data/astm-g173.js                                   ← espectros ASTM G173-03 tabulados (280–4000 nm)
 tests/calc.test.js  tests/lab.test.js               ← pruebas: node tests/calc.test.js && node tests/lab.test.js
+fx.js  fx.css  journey.js                           ← animaciones de la versión 4
 ```
 
 Accesibilidad: todas las simulaciones se controlan con teclado, las animaciones tienen pausa, se detienen fuera de
