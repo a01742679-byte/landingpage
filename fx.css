@@ -1,0 +1,261 @@
+/* ==========================================================================
+   SVOLTS · FX — estilos de la versión 4 (animaciones)
+   Se carga después de styles.css, simulador.css y laboratorio.css.
+   Misma paleta: #0B1F3A, #2473B8, #F5A623, #FFFFFF, #F4F7FA, #172536.
+   ========================================================================== */
+
+/* ---------- 1. Transición entre páginas ---------- */
+@property --fx-r { syntax: '<length>'; inherits: false; initial-value: 0px; }
+
+/* Salida: un sol que se expande desde el punto de clic (animado con JS) */
+.fx-iris {
+  position: fixed; inset: 0; z-index: 10000; pointer-events: none;
+  background: radial-gradient(circle at var(--x) var(--y), #FFF6E0 0, #F5A623 70px, #B9780C 170px, #0B1F3A 360px);
+  clip-path: circle(0 at var(--x) var(--y));
+}
+/* Llegada: la página se abre con un anillo de luz (CSS puro) */
+html.fx-arrive body::after {
+  content: ""; position: fixed; inset: 0; z-index: 10000; pointer-events: none;
+  background: radial-gradient(circle at var(--fx-x, 50%) var(--fx-y, 50%),
+    transparent var(--fx-r),
+    rgba(255, 226, 161, .95) calc(var(--fx-r) + 2px),
+    #F5A623 calc(var(--fx-r) + 14px),
+    #0B1F3A calc(var(--fx-r) + 130px));
+  animation: fxOpen .9s cubic-bezier(.65, 0, .25, 1) .05s both;
+}
+@keyframes fxOpen {
+  0% { --fx-r: 0px; opacity: 1; }
+  85% { opacity: 1; }
+  100% { --fx-r: 150vmax; opacity: 0; }
+}
+
+/* ---------- 2. Titulares que se materializan ---------- */
+.fx-words { perspective: 900px; }
+.fx-w { display: inline-block; }
+.js .fx-words .fx-wi {
+  display: inline-block; opacity: 0; filter: blur(12px);
+  transform: translate3d(0, .42em, 0) rotateX(-55deg); transform-origin: 50% 100%;
+  transition: opacity .8s ease, filter .9s ease, transform 1.05s cubic-bezier(.2, .8, .2, 1);
+  transition-delay: calc(var(--wi) * 55ms + var(--wd, 60ms));
+}
+.js .fx-words.fx-in .fx-wi { opacity: 1; filter: blur(0); transform: none; }
+.hero__title { --wd: 380ms; }
+.simhero__title, .labhero__title { --wd: 200ms; }
+
+/* ---------- 3. Luz que sigue al cursor ---------- */
+.fx-spot { position: relative; isolation: isolate; }
+.fx-spot::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgba(245, 166, 35, .15), transparent 42%);
+  opacity: 0; transition: opacity .35s ease;
+}
+.fx-spot::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; padding: 1.5px;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(245, 166, 35, .9), rgba(36, 115, 184, .4) 45%, transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0; transition: opacity .35s ease;
+}
+.fx-spot.fx-hot::before, .fx-spot.fx-hot::after { opacity: 1; }
+
+/* ---------- 4. Botones magnéticos ---------- */
+.btn, .nav__sim { transition-property: transform, box-shadow, background-color, color, border-color, translate; transition-duration: .18s, .18s, .2s, .2s, .2s, .45s; transition-timing-function: cubic-bezier(.2, .7, .2, 1); }
+.fx-mag { transition-duration: .18s, .18s, .2s, .2s, .2s, .12s; }
+
+/* ---------- 5. Valores que brillan al cambiar ---------- */
+@keyframes fxPulse {
+  0% { box-shadow: 0 0 0 0 rgba(245, 166, 35, .55), 0 0 28px rgba(245, 166, 35, .38); }
+  100% { box-shadow: 0 0 0 12px rgba(245, 166, 35, 0), 0 0 0 rgba(245, 166, 35, 0); }
+}
+.fx-pulse { animation: fxPulse .9s cubic-bezier(.2, .7, .2, 1) both; }
+
+/* ---------- 6. Entrada de vistas (simulador y laboratorio) ---------- */
+@keyframes fxViewIn {
+  from { opacity: 0; transform: translateY(16px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+.js .view:not([hidden]), .js .labview:not([hidden]) { animation: fxViewIn .6s cubic-bezier(.2, .8, .2, 1) both; }
+
+/* ---------- 7. Botón "Pausar animaciones" ---------- */
+.fx-toggle {
+  position: absolute; z-index: 4; display: inline-flex; align-items: center; gap: 9px;
+  padding: 8px 15px 8px 9px; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgba(188, 216, 238, .3); background: rgba(5, 14, 28, .5); color: #E6F0F9;
+  font: 700 .8rem/1 var(--font-body); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  transition: background-color .2s, border-color .2s;
+}
+.fx-toggle:hover { background: rgba(5, 14, 28, .75); border-color: rgba(188, 216, 238, .6); }
+.fx-toggle:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
+.fx-toggle__i { position: relative; width: 22px; height: 22px; border-radius: 50%; background: var(--sun); flex: none; }
+.fx-toggle__i::before, .fx-toggle__i::after { content: ""; position: absolute; top: 7px; width: 3px; height: 8px; border-radius: 1px; background: var(--navy); }
+.fx-toggle__i::before { left: 7px; }
+.fx-toggle__i::after { left: 12px; }
+html.fx-paused .fx-toggle__i::before { left: 8px; top: 6px; width: 0; height: 0; border-radius: 0; background: none; border-left: 8px solid var(--navy); border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+html.fx-paused .fx-toggle__i::after { display: none; }
+
+/* Pausa global: las animaciones CSS saltan a su estado final (nada queda oculto) */
+html.fx-paused *, html.fx-paused *::before, html.fx-paused *::after {
+  animation-duration: .001ms !important; animation-iteration-count: 1 !important; animation-delay: 0s !important;
+}
+
+/* ==========================================================================
+   PORTADA · hero con sol vivo
+   ========================================================================== */
+.hero { background: radial-gradient(120% 80% at 75% 20%, #17375F 0%, #0B1F3A 45%, #040B17 100%); color: #fff; }
+.hero::before { display: none; }
+.hero__gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hero__grid-bg {
+  background-image:
+    linear-gradient(rgba(143, 188, 227, .07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(143, 188, 227, .07) 1px, transparent 1px);
+}
+.hero .chip { background: rgba(255, 255, 255, .07); color: #E6F0F9; border-color: rgba(188, 216, 238, .28); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.hero__title { color: #fff; }
+.hero__title-em:not(.fx-has-words), .hero__title-em .fx-wi {
+  background: linear-gradient(100deg, #F5A623 0%, #FFE2A1 25%, #9CCBF5 50%, #FFE2A1 75%, #F5A623 100%) 0 0 / 9em 100% repeat-x;
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  animation: fxShimmer 7s linear infinite;
+}
+@keyframes fxShimmer { to { background-position: 9em 0; } }
+.hero__lead { color: rgba(226, 238, 250, .82); }
+.hero .btn--ghost { background: rgba(255, 255, 255, .04); color: #fff; border-color: rgba(255, 255, 255, .55); box-shadow: none; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.hero .btn--ghost:hover { background: #fff; color: var(--navy); border-color: #fff; }
+.hero__actions .btn--sim { box-shadow: 0 6px 0 var(--sun-deep), 0 0 46px rgba(245, 166, 35, .45); }
+.hero__actions .btn--sim:hover { box-shadow: 0 4px 0 var(--sun-deep), 0 0 64px rgba(245, 166, 35, .6); }
+.hero .scene__hint { color: rgba(188, 216, 238, .72); }
+.hero .ring { stroke: rgba(143, 188, 227, .28); }
+.hero .ring--2 { stroke: rgba(143, 188, 227, .14); }
+.hero .ring--3 { stroke: rgba(143, 188, 227, .2); }
+.hero .orbit-dot { fill: var(--sky-2); }
+.hero .orbit-dot--blue { fill: #5FA8E8; }
+.hero .shape--ring { border-color: var(--sky-3); }
+.hero .shape--dot { background: var(--sky-2); }
+.hero .cloud rect { opacity: .82; }
+/* Con WebGL, el sol de la ilustración cede su lugar al sol real */
+.hero.fx-gl-on .sun-swing { opacity: 0; }
+.hero .layer--island svg { filter: drop-shadow(0 0 34px rgba(245, 166, 35, .22)) drop-shadow(0 26px 46px rgba(0, 0, 0, .45)); }
+.hero__hills { fill: #050E1C; }
+.hero .fx-toggle { left: var(--gutter); bottom: 22px; }
+.hero__cue {
+  position: absolute; z-index: 3; left: 50%; bottom: 18px; translate: -50% 0;
+  display: grid; justify-items: center; gap: 8px; color: rgba(188, 216, 238, .8);
+  font: 700 .74rem/1 var(--font-body); letter-spacing: .16em; text-transform: uppercase; text-decoration: none;
+}
+.hero__cue i { position: relative; width: 2px; height: 30px; border-radius: 2px; background: rgba(188, 216, 238, .25); overflow: hidden; }
+.hero__cue i::after { content: ""; position: absolute; left: 0; top: -40%; width: 100%; height: 40%; border-radius: 2px; background: var(--sun); box-shadow: 0 0 10px var(--sun); animation: fxCue 1.8s cubic-bezier(.6, 0, .3, 1) infinite; }
+@keyframes fxCue { to { top: 110%; } }
+.hero__cue:hover { color: #fff; }
+.hero__cue:focus-visible { outline: 3px solid var(--sun); outline-offset: 6px; border-radius: 8px; }
+
+/* Cierre: amanecer */
+.closing__gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.closing .btn--line { background: rgba(5, 14, 28, .35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.closing.fx-gl-on .closing__sun { opacity: 0; }
+
+/* Simulador: encabezado con sol vivo */
+.simhero__gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.simhero.fx-gl-on .simhero__sun { display: none; }
+.simhero__inner { z-index: 1; }
+.simhero .fx-toggle { right: var(--gutter); bottom: calc(var(--lap) + 18px); }
+
+/* Laboratorio: aurora espectral */
+.labhero__aurora { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.labhero.fx-gl-on::after { opacity: .55; }
+.labhero .fx-toggle { right: var(--gutter); bottom: calc(var(--lap) + 18px); }
+
+/* ==========================================================================
+   PORTADA · EL VIAJE DE UN FOTÓN
+   Por defecto (sin JS o con movimiento reducido): tarjetas apiladas.
+   Con .is-live: escena fijada al desplazamiento.
+   ========================================================================== */
+.journey { position: relative; background: #050E1C; color: #fff; }
+.journey__stage { position: relative; padding: calc(var(--space) * .7) 0 calc(var(--space) * .7 + var(--lap)); }
+.journey__gl, .journey__cv, .journey__rail, .journey__bar, .journey__skip { display: none; }
+.journey__hud { position: relative; width: min(1240px, 100% - (var(--gutter) * 2)); margin-inline: auto; display: grid; gap: 28px; }
+.journey__head { display: grid; gap: 8px; max-width: 760px; }
+.journey__head .eyebrow { color: var(--sun); margin: 0; }
+.journey__title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.8rem, 3.4vw, 3rem); line-height: 1.06; letter-spacing: -.03em; text-wrap: balance; }
+.jchs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.jch__card { position: relative; display: grid; gap: 12px; align-content: start; height: 100%; padding: 22px; border-radius: 28px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(188, 216, 238, .16); }
+.jch__art { display: block; width: 100%; height: 150px; border-radius: 18px; background: #081A33; }
+.jch__k { font: 700 .76rem/1 var(--font-body); letter-spacing: .16em; text-transform: uppercase; color: var(--sun); }
+.jch h3 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.5rem, 2.6vw, 2.4rem); line-height: 1.04; letter-spacing: -.035em; text-wrap: balance; color: #fff; }
+.jch p { color: rgba(226, 238, 250, .82); font-size: .98rem; line-height: 1.55; text-wrap: pretty; }
+.jch__stats { margin: 4px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.jch__stats div { display: grid; gap: 2px; align-content: start; padding: 12px 14px; border-radius: 16px; background: rgba(255, 255, 255, .06); border: 1px solid rgba(188, 216, 238, .12); min-width: 0; }
+.jch__stats dt { font-size: .74rem; font-weight: 700; color: rgba(188, 216, 238, .78); line-height: 1.3; }
+.jch__stats dd { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(1.05rem, 1.4vw, 1.3rem); color: #fff; font-variant-numeric: tabular-nums; line-height: 1.15; overflow-wrap: anywhere; }
+.jch__stats dd small { display: block; margin-top: 2px; font-family: var(--font-body); font-size: .72rem; font-weight: 600; color: rgba(188, 216, 238, .7); }
+.jch__cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.jch__cta .btn { padding: 12px 20px; font-size: .92rem; }
+.services { margin-top: calc(var(--lap) * -1); border-radius: var(--lap) var(--lap) 0 0; z-index: 1; }
+
+/* ---------- Modo vivo: escena fijada ---------- */
+.journey.is-live .journey__track { position: relative; height: 520vh; }
+.journey.is-live .journey__stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; padding: 0; }
+.journey.is-live .journey__gl, .journey.is-live .journey__cv { display: block; position: absolute; inset: 0; width: 100%; height: 100%; }
+.journey.is-live .journey__gl { opacity: 0; }
+.journey.is-live .journey__hud { position: absolute; inset: 0; z-index: 2; width: auto; margin: 0; display: block; pointer-events: none; }
+.journey.is-live .journey__hud a, .journey.is-live .journey__hud button { pointer-events: auto; }
+.journey.is-live .journey__head { position: absolute; left: var(--gutter); top: clamp(96px, 13vh, 132px); max-width: 520px; transition: opacity .45s ease, translate .45s ease; }
+.journey.is-live .journey__title { font-size: clamp(1.5rem, 2.6vw, 2.3rem); }
+.journey.is-live.is-past-intro .journey__head { opacity: 0; translate: 0 -14px; }
+.journey.is-live .jchs { display: block; }
+.journey.is-live .jch {
+  position: absolute; left: var(--gutter); bottom: max(7vh, 56px); width: min(440px, 40vw);
+  opacity: 0; visibility: hidden; translate: 0 26px;
+  transition: opacity .4s ease, translate .6s cubic-bezier(.2, .8, .2, 1), visibility 0s linear .4s;
+}
+.journey.is-live .jch.is-on { opacity: 1; visibility: visible; translate: 0 0; transition: opacity .55s ease .05s, translate .7s cubic-bezier(.2, .8, .2, 1) .05s, visibility 0s; }
+.journey.is-live .jch__card { background: rgba(5, 14, 28, .62); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 30px 80px rgba(0, 0, 0, .35); padding: 24px 24px 22px; }
+.journey.is-live .journey__rail { display: grid; position: absolute; right: var(--gutter); top: 50%; translate: 0 -50%; gap: 10px; }
+.journey__dot {
+  position: relative; width: 34px; height: 34px; border-radius: 50%; padding: 0; cursor: pointer;
+  border: 1.5px solid rgba(188, 216, 238, .35); background: rgba(5, 14, 28, .5); color: rgba(188, 216, 238, .85);
+  font: 700 .72rem/1 var(--font-display); transition: background-color .25s, color .25s, border-color .25s, scale .25s, box-shadow .25s;
+}
+.journey__dot:hover { border-color: #fff; color: #fff; }
+.journey__dot[aria-current="step"] { background: var(--sun); border-color: var(--sun); color: var(--navy); scale: 1.12; box-shadow: 0 0 22px rgba(245, 166, 35, .55); }
+.journey__dot:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
+.journey.is-live .journey__bar { display: block; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(188, 216, 238, .12); }
+.journey__bar i { display: block; height: 100%; width: calc(var(--p, 0) * 100%); background: linear-gradient(90deg, #2473B8, #F5A623); box-shadow: 0 0 12px rgba(245, 166, 35, .6); }
+.journey.is-live .journey__skip {
+  display: inline-block; position: absolute; left: 50%; translate: -50% 0; bottom: 22px; color: rgba(188, 216, 238, .85);
+  font: 700 .82rem/1 var(--font-body); text-decoration: none; padding: 9px 13px; border-radius: 999px; border: 1px solid rgba(188, 216, 238, .25); background: rgba(5, 14, 28, .4);
+}
+.journey__skip:hover { color: #fff; border-color: #fff; }
+.journey__skip:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
+
+@media (max-width: 899px) {
+  .journey.is-live .journey__track { height: 480vh; }
+  .journey.is-live .journey__head { top: 86px; right: var(--gutter); }
+  .journey.is-live .journey__title { font-size: 1.3rem; }
+  .journey.is-live .jch { left: 12px; right: 12px; bottom: 54px; width: auto; }
+  .journey.is-live .jch__card { padding: 16px 16px 14px; gap: 8px; border-radius: 22px; }
+  .journey.is-live .jch h3 { font-size: 1.45rem; }
+  .journey.is-live .jch p { font-size: .88rem; line-height: 1.45; }
+  .journey.is-live .jch__stats { gap: 8px; }
+  .journey.is-live .jch__stats div { padding: 9px 11px; }
+  .journey.is-live .jch__stats dd { font-size: 1rem; }
+  .journey.is-live .journey__rail { top: 50%; right: 8px; gap: 6px; translate: 0 -120%; }
+  .journey.is-live .journey__dot { width: 28px; height: 28px; font-size: .66rem; }
+  .journey.is-live .journey__skip { left: 12px; translate: none; bottom: 14px; font-size: .74rem; padding: 7px 10px; }
+  .journey.is-live .jch__cta .btn { padding: 10px 14px; font-size: .84rem; }
+  .journey.is-live .jch { bottom: 52px; }
+}
+@media (max-width: 700px) {
+  .simhero .fx-toggle, .labhero .fx-toggle { position: relative; right: auto; bottom: auto; display: flex; width: max-content; margin: 18px var(--gutter) 0 auto; }
+  .hero__cue { display: none; }
+  .hero .fx-toggle { bottom: 14px; }
+}
+
+/* ---------- Movimiento reducido ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html.fx-arrive body::after, .fx-iris { display: none; }
+  .fx-toggle { display: none; }
+  .js .view:not([hidden]), .js .labview:not([hidden]) { animation: none; }
+  .hero__title-em:not(.fx-has-words), .hero__title-em .fx-wi { animation: none; }
+  .hero__cue i::after { animation: none; top: 30%; }
+  .fx-pulse { animation: none; }
+}
